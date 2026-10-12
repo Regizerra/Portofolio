@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta
+      name="description"
+      content="Creative portfolio — Graphic Design, Illustration, GIS, Video & Photo Editing. Jakarta, Indonesia."
+    />
+    <title>Your Name — Creative Studio</title>
+  </head>
+  <body>
+    <!-- INTRO OVERLAY -->
+    <div class="intro-overlay" id="intro-overlay" aria-hidden="true">
+      <span class="loader"></span>
+    </div>
+
+    <!-- HEADER / TUNNELS -->
+    <header class="site-header" id="top">
+      <div class="header-inner">
+        <a class="brand" href="#/" aria-label="Home">
+          <span data-edit="brand.name">Your Name</span><span class="reg" data-edit="brand.mark">®</span>
+        </a>
+
+        <p class="header-tunnel" data-edit="brand.tunnel">Creative Studio</p>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav" data-i18n="menu">
+          Menu
+        </button>
+
+        <nav class="nav" id="nav" aria-label="Main navigation">
+          <a href="#/work" data-nav="work" data-i18n="work">Work</a>
+          <a href="#/experience" data-nav="experience" data-i18n="experience">Experience</a>
+          <a href="#/about" data-nav="about" data-i18n="about">About</a>
+          <a class="copy-email" id="nav-email" data-mailto href="mailto:email@you.com">Email</a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" id="nav-ig">IG</a>
+          <div class="lang-switch" role="group">
+            <button type="button" data-lang-btn="en" class="is-active">EN</button>
+            <button type="button" data-lang-btn="id">ID</button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main id="home-main">
+      <!-- MEDIA WALL -->
+      <section class="wall" id="wall">
+        <div class="wall-cols" id="wall-cols"></div>
+        <div class="wall-vignette" aria-hidden="true"></div>
+
+        <div class="wall-caption">
+          <p class="label" data-edit="wall.eyebrow">Selected Work — Jakarta, Indonesia</p>
+          <h1 class="wall-title">
+            <span data-edit="wall.line1">Design</span>
+            <span data-edit="wall.line2">Illustrate</span>
+            <span data-edit="wall.line3">Map &amp; Edit</span>
+          </h1>
+          <a class="wall-link" href="#/work"><span data-edit="wall.link">View All Work</span> ↓</a>
+        </div>
+      </section>
+    </main>
+
+    <!-- WORK PAGE -->
+    <section class="page" id="work-page" hidden>
+      <div class="page-head">
+        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <div class="page-head-text">
+          <p class="label dim" data-edit="workSection.label">Work</p>
+          <h1 class="page-title" id="work-title" data-edit="workSection.title">All Work</h1>
+          <p class="body dim page-note" id="work-note" data-edit="workSection.note"></p>
+        </div>
+      </div>
+
+      <div class="work-tabs" id="work-tabs"></div>
+      <div class="work-grid" id="work-grid"></div>
+      <p class="body dim work-empty" id="work-empty" data-i18n="empty" hidden>No projects published yet.</p>
+    </section>
+
+    <!-- EXPERIENCE PAGE -->
+    <section class="page" id="experience-page" hidden>
+      <div class="page-head">
+        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <div class="page-head-text">
+          <p class="label dim" data-edit="experienceSection.label">Experience</p>
+          <h1 class="page-title" id="experience-title" data-edit="experienceSection.title">Experience</h1>
+          <p class="body dim page-note" data-edit="experienceSection.note"></p>
+        </div>
+      </div>
+
+      <div class="xp-list" id="xp-list"></div>
+      <button class="edit-ctrl edit-only add-block" type="button" data-action="add" data-list="experience">
+        + Experience
+      </button>
+      <p class="body dim work-empty" id="xp-empty" data-i18n="xpEmpty" hidden>Nothing added yet.</p>
+    </section>
+
+    <!-- ABOUT PAGE -->
+    <section class="page" id="about-page" hidden>
+      <div class="page-head page-head-about">
+        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <div class="page-head-text">
+          <p class="label dim" data-edit="about.label">About</p>
+          <h1 class="page-title" id="about-title" data-edit="brand.name">Your Name</h1>
+        </div>
+        <figure class="about-photo" id="about-photo" data-img="about.photo">
+          <img class="about-photo-img" alt="Portrait" />
+        </figure>
+      </div>
+
+      <div id="about-body"></div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="ticker">
+        <div class="ticker-track" id="marquee-track"></div>
+      </div>
+      <div class="footer-inner" id="footer-inner"></div>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
