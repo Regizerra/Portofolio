@@ -31,14 +31,102 @@
         </button>
 
         <nav class="nav" id="nav" aria-label="Main navigation">
+          <span class="nav-indicator" id="nav-indicator" aria-hidden="true"></span>
           <a href="#/work" data-nav="work" data-i18n="work">Work</a>
           <a href="#/experience" data-nav="experience" data-i18n="experience">Experience</a>
           <a href="#/about" data-nav="about" data-i18n="about">About</a>
-          <a class="copy-email" id="nav-email" data-mailto href="mailto:email@you.com">Email</a>
-          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" id="nav-ig">IG</a>
-          <div class="lang-switch" role="group">
-            <button type="button" data-lang-btn="en" class="is-active">EN</button>
-            <button type="button" data-lang-btn="id">ID</button>
+          <a
+            class="Btn Btn-mail"
+            id="nav-email"
+            data-mailto
+            href="mailto:email@you.com"
+            aria-label="Email"
+          >
+            <span class="BG" aria-hidden="true"></span>
+            <span class="svgContainer" aria-hidden="true">
+              <svg
+                class="ig-icon"
+                width="16"
+                height="16"
+                viewBox="0 0 81.70001 59.10004"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polygon
+                  points="78.7 3 78.7 56.1 3 56.1 3 3 3.14 3 40.85 40.71 78.55 3 78.7 3"
+                  stroke="currentColor"
+                  stroke-width="6"
+                  stroke-linejoin="round"
+                ></polygon>
+              </svg>
+            </span>
+          </a>
+          <a
+            class="Btn"
+            href="https://www.instagram.com/"
+            target="_blank"
+            rel="noreferrer"
+            id="nav-ig"
+            aria-label="Instagram"
+          >
+            <span class="BG" aria-hidden="true"></span>
+            <span class="svgContainer" aria-hidden="true">
+              <svg
+                class="ig-icon"
+                width="17"
+                height="17"
+                viewBox="0 0 82.26801 82.26801"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="3"
+                  y="3"
+                  width="76.26801"
+                  height="76.26801"
+                  rx="15.85741"
+                  stroke="currentColor"
+                  stroke-width="6"
+                ></rect>
+                <circle
+                  cx="66.26167"
+                  cy="16.34677"
+                  r="3.91489"
+                  fill="currentColor"
+                ></circle>
+                <circle
+                  cx="41.13401"
+                  cy="41.13401"
+                  r="20.93085"
+                  stroke="currentColor"
+                  stroke-width="6"
+                ></circle>
+              </svg>
+            </span>
+          </a>
+          <div class="lang-switch" id="lang-switch" role="group" aria-label="Language" data-active="en">
+            <span class="lang-switch-thumb" aria-hidden="true"></span>
+            <button type="button" class="lang-opt" data-lang-btn="en" title="English" aria-label="Switch to English">
+              <span class="lang-flag" aria-hidden="true">
+                <svg viewBox="0 0 24 16" width="18" height="12">
+                  <rect width="24" height="16" fill="#012169"></rect>
+                  <path d="M0 0 L24 16 M24 0 L0 16" stroke="#fff" stroke-width="3.4"></path>
+                  <path d="M0 0 L24 16 M24 0 L0 16" stroke="#C8102E" stroke-width="1.6"></path>
+                  <path d="M12 0 V16 M0 8 H24" stroke="#fff" stroke-width="5.2"></path>
+                  <path d="M12 0 V16 M0 8 H24" stroke="#C8102E" stroke-width="3"></path>
+                </svg>
+              </span>
+              <span class="lang-code">EN</span>
+            </button>
+            <button type="button" class="lang-opt" data-lang-btn="id" title="Bahasa Indonesia" aria-label="Ganti ke Bahasa Indonesia">
+              <span class="lang-flag" aria-hidden="true">
+                <svg viewBox="0 0 24 16" width="18" height="12">
+                  <rect width="24" height="8" fill="#E11D2E"></rect>
+                  <rect y="8" width="24" height="8" fill="#ffffff"></rect>
+                </svg>
+              </span>
+              <span class="lang-code">ID</span>
+            </button>
           </div>
         </nav>
       </div>
@@ -57,7 +145,7 @@
             <span data-edit="wall.line2">Illustrate</span>
             <span data-edit="wall.line3">Map &amp; Edit</span>
           </h1>
-          <a class="wall-link" href="#/work"><span data-edit="wall.link">View All Work</span> ↓</a>
+          <a class="wall-link" href="#/work"><span data-edit="wall.link">View All Work</span></a>
         </div>
       </section>
     </main>
@@ -65,7 +153,22 @@
     <!-- WORK PAGE -->
     <section class="page" id="work-page" hidden>
       <div class="page-head">
-        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <a class="back-link" href="#/" aria-label="Index" data-i18n-label="index">
+          <span class="button-box" aria-hidden="true">
+            <svg
+              class="button-elem"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5"></path>
+              <path d="m12 19-7-7 7-7"></path>
+            </svg>
+          </span>
+        </a>
         <div class="page-head-text">
           <p class="label dim" data-edit="workSection.label">Work</p>
           <h1 class="page-title" id="work-title" data-edit="workSection.title">All Work</h1>
@@ -81,7 +184,22 @@
     <!-- EXPERIENCE PAGE -->
     <section class="page" id="experience-page" hidden>
       <div class="page-head">
-        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <a class="back-link" href="#/" aria-label="Index" data-i18n-label="index">
+          <span class="button-box" aria-hidden="true">
+            <svg
+              class="button-elem"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5"></path>
+              <path d="m12 19-7-7 7-7"></path>
+            </svg>
+          </span>
+        </a>
         <div class="page-head-text">
           <p class="label dim" data-edit="experienceSection.label">Experience</p>
           <h1 class="page-title" id="experience-title" data-edit="experienceSection.title">Experience</h1>
@@ -99,7 +217,22 @@
     <!-- ABOUT PAGE -->
     <section class="page" id="about-page" hidden>
       <div class="page-head page-head-about">
-        <a class="back-link label" href="#/" data-i18n="index">← Index</a>
+        <a class="back-link" href="#/" aria-label="Index" data-i18n-label="index">
+          <span class="button-box" aria-hidden="true">
+            <svg
+              class="button-elem"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M19 12H5"></path>
+              <path d="m12 19-7-7 7-7"></path>
+            </svg>
+          </span>
+        </a>
         <div class="page-head-text">
           <p class="label dim" data-edit="about.label">About</p>
           <h1 class="page-title" id="about-title" data-edit="brand.name">Your Name</h1>
@@ -117,6 +250,24 @@
         <div class="ticker-track" id="marquee-track"></div>
       </div>
       <div class="footer-inner" id="footer-inner"></div>
+
+      <button class="back-to-top" type="button" aria-label="Back to top">
+        <span class="back-to-top-icon" aria-hidden="true">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 19V5"></path>
+            <path d="m5 12 7-7 7 7"></path>
+          </svg>
+        </span>
+      </button>
     </footer>
 
     <script type="module" src="/src/main.js"></script>

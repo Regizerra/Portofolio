@@ -1,4 +1,4 @@
-// ============================================================
+﻿// ============================================================
 //  ALL WEBSITE CONTENT IS SET HERE.
 //  You normally don't need to edit this file by hand —
 //  use "Custom Mode" on the site (type code 2710) and edit
@@ -83,25 +83,28 @@ export const defaultContent = {
   ],
 
   // img: put the file in public/work/ then set  "/work/filename.jpg"
+  //       (or just click the thumbnail and pick the file in Custom Mode)
+  // video: video/motion file. Put it in public/work/ and use "/work/filename.mp4"
+  //        — videos are far too large to be embedded, so they stay as file paths.
   // img: null  -> the work is not published yet, so visitors won't see it
   //             (it still shows in Custom Mode so you can add the image)
   // featured: true -> shows on the home media wall
   works: [
-    { title: 'Local Coffee Brand Identity', cat: 'graphic-design', year: 2025, img: null, featured: true },
-    { title: 'Skincare Product Packaging', cat: 'graphic-design', year: 2025, img: null, featured: true },
-    { title: 'Music Festival Poster', cat: 'graphic-design', year: 2024, img: null, featured: true },
-    { title: 'Editorial Illustration Series', cat: 'illustration', year: 2025, img: null, featured: true },
-    { title: 'Mascot Character Illustration', cat: 'illustration', year: 2024, img: null, featured: true },
-    { title: "Children's Book Cover", cat: 'illustration', year: 2024, img: null, featured: true },
-    { title: 'Corporate Profile Video', cat: 'video-editing', year: 2025, img: null, featured: true },
-    { title: 'Campaign Reels Content', cat: 'video-editing', year: 2024, img: null, featured: true },
-    { title: 'Annual Event Aftermovie', cat: 'video-editing', year: 2024, img: null, featured: true },
-    { title: 'Land Use Thematic Map', cat: 'gis', year: 2025, img: null, featured: true },
-    { title: 'Flood Data Visualization', cat: 'gis', year: 2024, img: null, featured: true },
-    { title: 'Interactive Tourism Map', cat: 'gis', year: 2024, img: null, featured: true },
-    { title: 'Product Photo Retouching', cat: 'photo-editing', year: 2025, img: null, featured: true },
-    { title: 'Editorial Photo Color Grading', cat: 'photo-editing', year: 2024, img: null, featured: true },
-    { title: 'Vintage Photo Restoration', cat: 'photo-editing', year: 2023, img: null, featured: true },
+    { title: 'Local Coffee Brand Identity', cat: 'graphic-design', year: 2025, img: null, video: null, featured: true },
+    { title: 'Skincare Product Packaging', cat: 'graphic-design', year: 2025, img: null, video: null, featured: true },
+    { title: 'Music Festival Poster', cat: 'graphic-design', year: 2024, img: null, video: null, featured: true },
+    { title: 'Editorial Illustration Series', cat: 'illustration', year: 2025, img: null, video: null, featured: true },
+    { title: 'Mascot Character Illustration', cat: 'illustration', year: 2024, img: null, video: null, featured: true },
+    { title: "Children's Book Cover", cat: 'illustration', year: 2024, img: null, video: null, featured: true },
+    { title: 'Corporate Profile Video', cat: 'video-editing', year: 2025, img: null, video: null, featured: true },
+    { title: 'Campaign Reels Content', cat: 'video-editing', year: 2024, img: null, video: null, featured: true },
+    { title: 'Annual Event Aftermovie', cat: 'video-editing', year: 2024, img: null, video: null, featured: true },
+    { title: 'Land Use Thematic Map', cat: 'gis', year: 2025, img: null, video: null, featured: true },
+    { title: 'Flood Data Visualization', cat: 'gis', year: 2024, img: null, video: null, featured: true },
+    { title: 'Interactive Tourism Map', cat: 'gis', year: 2024, img: null, video: null, featured: true },
+    { title: 'Product Photo Retouching', cat: 'photo-editing', year: 2025, img: null, video: null, featured: true },
+    { title: 'Editorial Photo Color Grading', cat: 'photo-editing', year: 2024, img: null, video: null, featured: true },
+    { title: 'Vintage Photo Restoration', cat: 'photo-editing', year: 2023, img: null, video: null, featured: true },
   ],
 
   about: {

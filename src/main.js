@@ -18,6 +18,7 @@ const UI = {
     empty: 'No projects published yet.',
     xpEmpty: 'Nothing added yet.',
     preview: 'Close preview',
+    langLabel: 'Language',
   },
   id: {
     work: 'Karya',
@@ -29,6 +30,7 @@ const UI = {
     empty: 'Belum ada karya yang dipublikasikan.',
     xpEmpty: 'Belum ada yang ditambahkan.',
     preview: 'Tutup pratinjau',
+    langLabel: 'Bahasa',
   },
 }
 
@@ -205,13 +207,22 @@ const applyLang = () => {
     const v = d[el.dataset.i18n]
     if (v != null) el.textContent = v
   })
+  document.querySelectorAll('[data-i18n-label]').forEach((el) => {
+    const v = d[el.dataset.i18nLabel]
+    if (v != null) el.setAttribute('aria-label', v)
+  })
   document.querySelectorAll('[data-lang-btn]').forEach((b) => {
     b.classList.toggle('is-active', b.dataset.langBtn === lang.current)
   })
+  const switchEl = document.querySelector('#lang-switch')
+  if (switchEl) {
+    switchEl.dataset.active = lang.current
+    switchEl.setAttribute('aria-label', d.langLabel)
+  }
   const closeBtn = document.querySelector('.lightbox-close')
   if (closeBtn) closeBtn.setAttribute('aria-label', d.preview)
   document.querySelectorAll('.back-link').forEach((el) => {
-    el.textContent = `\u2190 ${d.index}`
+    el.setAttribute('aria-label', d.index)
   })
   updateDocTitle()
 }
@@ -232,7 +243,9 @@ const renderGrid = (container, items, mapper) => {
   items.forEach((item, n) => container.appendChild(mapper(item, n)))
 }
 
-/* ---------- Lightbox ---------- */
+/* ---------- Lightbox ----------
+   buka dari posisi kartu aslinya (FLIP): media di-"tarik" ke ukuran &
+   posisi thumbnail, lalu membesar ke tengah — bukan sekadar fade. */
 const lightbox = (() => {
   const box = document.createElement('div')
   box.className = 'lightbox'
@@ -242,9 +255,13 @@ const lightbox = (() => {
   box.setAttribute('aria-modal', 'true')
   box.setAttribute('aria-label', 'Project preview')
   box.innerHTML = `
+    <div class="lightbox-scrim" aria-hidden="true"></div>
     <button class="lightbox-close label" type="button" aria-label="Close preview">Close ✕</button>
     <figure class="lightbox-figure">
-      <img class="lightbox-img" alt="" />
+      <div class="lightbox-media">
+        <img class="lightbox-img" alt="" />
+        <video class="lightbox-video" controls playsinline preload="metadata" hidden></video>
+      </div>
       <figcaption class="lightbox-cap">
         <h3 class="lightbox-title"></h3>
         <span class="label lightbox-meta"></span>
@@ -252,19 +269,69 @@ const lightbox = (() => {
     </figure>`
   document.body.appendChild(box)
 
+  const media = box.querySelector('.lightbox-media')
   const img = box.querySelector('.lightbox-img')
+  const video = box.querySelector('.lightbox-video')
   const title = box.querySelector('.lightbox-title')
   const meta = box.querySelector('.lightbox-meta')
   const closeBtn = box.querySelector('.lightbox-close')
+
+  const EASE = 'cubic-bezier(.22,.9,.24,1)'
   let lastFocus = null
+  let animation = null
+  let originRect = null
+
+  const stopAnim = () => {
+    if (animation) {
+      animation.cancel()
+      animation = null
+    }
+    media.style.transform = ''
+  }
+
+  /* animate from the thumbnail's rect to the final centered position */
+  const animFrom = (rect, reverse) => {
+    stopAnim()
+    if (!rect || !rect.width || !rect.height) return Promise.resolve()
+
+    const to = media.getBoundingClientRect()
+    if (!to.width || !to.height) return Promise.resolve()
+
+    const dx = rect.left - to.left
+    const dy = rect.top - to.top
+    const sx = Math.max(rect.width / to.width, 0.02)
+    const sy = Math.max(rect.height / to.height, 0.02)
+
+    const frames = reverse
+      ? [
+          { transform: 'translate(0,0) scale(1)', transformOrigin: 'top left', opacity: 1 },
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, transformOrigin: 'top left', opacity: 0.85 },
+        ]
+      : [
+          { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, transformOrigin: 'top left', opacity: 0.85 },
+          { transform: 'translate(0,0) scale(1)', transformOrigin: 'top left', opacity: 1 },
+        ]
+
+    animation = media.animate(frames, {
+      duration: reverse ? 300 : 420,
+      easing: EASE,
+      fill: 'none',
+    })
+    return animation.finished.catch(() => {})
+  }
 
   const close = () => {
     if (box.hidden) return
+    video.pause()
+    video.removeAttribute('src')
+    const rect = originRect
     box.classList.add('hide')
     document.body.style.overflow = ''
-    setTimeout(() => {
+    animFrom(rect, true).then(() => {
       box.hidden = true
-    }, 280)
+      stopAnim()
+      originRect = null
+    })
     if (lastFocus) lastFocus.focus()
   }
 
@@ -272,20 +339,44 @@ const lightbox = (() => {
     if (!box.hidden) close()
   })
 
-  const open = (work) => {
+  const open = (work, sourceEl) => {
     lastFocus = document.activeElement
-    img.src = work.img
-    img.alt = work.title
+    const isVideo = !!work.video
+
+    img.hidden = isVideo
+    video.hidden = !isVideo
+
+    if (isVideo) {
+      img.removeAttribute('src')
+      video.src = work.video
+      video.poster = work.img || ''
+    } else {
+      video.pause()
+      video.removeAttribute('src')
+      video.removeAttribute('poster')
+      img.src = work.img
+      img.alt = work.title
+    }
+
     title.textContent = work.title
     meta.textContent = `${work.year} · ${catLabel(work.cat)}`
+
     box.hidden = false
-    requestAnimationFrame(() => box.classList.remove('hide'))
     document.body.style.overflow = 'hidden'
+    box.classList.remove('hide')
+
+    // wait for the final layout, then start from the thumbnail's position
+    requestAnimationFrame(() => {
+      originRect = sourceEl ? sourceEl.getBoundingClientRect() : null
+      animFrom(originRect, false)
+    })
+
+    if (isVideo) video.play().catch(() => {})
     closeBtn.focus()
   }
 
   box.addEventListener('click', (e) => {
-    if (e.target === box) close()
+    if (e.target === box || e.target.classList.contains('lightbox-scrim')) close()
   })
   closeBtn.addEventListener('click', close)
   document.addEventListener('keydown', (e) => {
@@ -299,6 +390,7 @@ const lightbox = (() => {
 const createWorkCard = (work, i, num = i + 1) => {
   const { a, b } = tonePair(74 - (i % 5) * 12)
   const hasImg = !!work.img
+  const hasVideo = !!work.video
   const card = document.createElement('article')
   card.className = 'work-card'
   card.dataset.work = String(i)
@@ -306,7 +398,7 @@ const createWorkCard = (work, i, num = i + 1) => {
   card.setAttribute('role', 'button')
   card.setAttribute(
     'aria-label',
-    hasImg
+    hasImg || hasVideo
       ? `View ${work.title} fullscreen`
       : `${work.title}, ${work.year}, ${catLabel(work.cat)}`,
   )
@@ -317,18 +409,24 @@ const createWorkCard = (work, i, num = i + 1) => {
     )
     .join('')
 
-  card.innerHTML = `
-    <div class="work-thumb${hasImg ? ' has-img' : ''}" data-img="works.${i}.img"
-         style="--a:${a};--b:${b}">
+card.innerHTML = `
+    <div class="work-thumb${hasImg || hasVideo ? ' has-img' : ''}${hasVideo ? ' has-video' : ''}"
+         data-img="works.${i}.img" style="--a:${a};--b:${b}">
       ${hasImg ? `<img class="work-img" alt="${esc(work.title)}" src="${esc(work.img)}">` : ''}
+      ${
+        hasVideo
+          ? `<video class="work-video" src="${esc(work.video)}" muted loop playsinline preload="metadata"></video>`
+          : ''
+      }
+      ${hasVideo ? '<span class="work-play" aria-hidden="true"></span>' : ''}
       <span class="work-thumb-index">${pad(num)}</span>
-    </div>
-    <div class="work-card-meta">
-      <h3 class="work-card-title" data-edit="${ed(`works.${i}.title`)}">${esc(work.title)}</h3>
-      <span class="label work-card-sub">
-        <span data-edit="${ed(`works.${i}.year`)}">${esc(work.year)}</span> ·
-        <a class="work-card-cat" href="#/work/${esc(work.cat)}">${esc(catLabel(work.cat))}</a>
-      </span>
+      <div class="work-card-meta">
+        <h3 class="work-card-title" data-edit="${ed(`works.${i}.title`)}">${esc(work.title)}</h3>
+        <span class="label work-card-sub">
+          <span data-edit="${ed(`works.${i}.year`)}">${esc(work.year)}</span> ·
+          <a class="work-card-cat" href="#/work/${esc(work.cat)}">${esc(catLabel(work.cat))}</a>
+        </span>
+      </div>
     </div>
     <div class="edit-only work-edit">
       <select class="edit-select" data-action="work-cat" data-index="${i}">${options}</select>
@@ -336,12 +434,15 @@ const createWorkCard = (work, i, num = i + 1) => {
         <input type="checkbox" data-action="work-featured" data-index="${i}"${work.featured ? ' checked' : ''}>
         Wall
       </label>
+      <button class="edit-ctrl edit-video-btn" type="button"
+        data-action="pick-video" data-index="${i}">${work.video ? 'Change video' : '+ Video'}</button>
       <button class="edit-ctrl" type="button" data-action="del" data-list="works" data-index="${i}">Delete</button>
     </div>
   `
 
   if (hasImg) {
     attachImgFallback(card.querySelector('.work-img'), () => {
+      if (hasVideo) return
       const th = card.querySelector('.work-thumb')
       th.classList.remove('has-img')
       th.style.setProperty('--a', a)
@@ -349,25 +450,55 @@ const createWorkCard = (work, i, num = i + 1) => {
     })
   }
 
+  attachVideoHover(card)
   return card
+}
+
+/* Hover-to-play for video cards (pointer devices only). */
+const attachVideoHover = (root) => {
+  const video = root.querySelector('video')
+  if (!video) return
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+  if (!canHover) return
+
+  let played = false
+  const play = () => {
+    if (played) return
+    played = true
+    video.play().catch(() => {})
+  }
+  root.addEventListener('mouseenter', play)
+  root.addEventListener('mouseleave', () => {
+    if (!video.paused) {
+      video.pause()
+      video.currentTime = 0
+    }
+played = false
+  })
 }
 
 /* ---------- Media wall ---------- */
 const createWallTile = (work, i) => {
   const { a, b } = tonePair(76 - (i % 6) * 11)
+  const hasVideo = !!work.video
   const tile = document.createElement('a')
   tile.className = 'wall-tile'
-  tile.href = `#/work/${work.cat}`
+  tile.href = `#/work/${esc(work.cat)}`
   tile.dataset.img = `works.${i}.img`
   tile.dataset.work = String(i)
   tile.setAttribute(
     'aria-label',
-    work.img ? `View ${work.title} fullscreen` : `${work.title}, ${catLabel(work.cat)}`,
+    work.img || hasVideo ? `View ${work.title} fullscreen` : `${work.title}, ${catLabel(work.cat)}`,
   )
   tile.style.setProperty('--a', a)
   tile.style.setProperty('--b', b)
   tile.innerHTML = `
     ${work.img ? `<img class="wall-img" alt="${esc(work.title)}" src="${esc(work.img)}">` : ''}
+    ${
+      hasVideo
+        ? `<video class="wall-video" src="${esc(work.video)}" muted loop playsinline preload="metadata"></video>`
+        : ''
+    }
     <span class="wall-tile-label">${esc(catLabel(work.cat))}</span>
   `
   if (work.img) {
@@ -376,22 +507,32 @@ const createWallTile = (work, i) => {
       if (img) img.remove()
     })
   }
+  attachVideoHover(tile)
   return tile
 }
 
 const wallCap = () => {
   const w = window.innerWidth
-  if (w <= 740) return 3
+  if (w <= 640) return 3
   if (w <= 900) return 4
   return 6
 }
 
-const wallColCount = (n) => Math.max(1, Math.min(wallCap(), Math.floor(n / 3)))
+/* Di layar kecil dinding tidak digeser otomatis (loopingnya akan bolong),
+   tapi jadi grid statis yang ikut scroll — lebih wajar di HP. */
+const wallIsStatic = () => window.matchMedia('(max-width: 640px)').matches
+
+const wallColCount = (n) => {
+  const cap = wallCap()
+  // grid statis (HP): tidak ada syarat >=3 tile per kolom, jadi boleh lebih rapat
+  if (wallIsStatic()) return Math.max(1, Math.min(cap, Math.ceil(n / 3)))
+  return Math.max(1, Math.min(cap, Math.floor(n / 3)))
+}
 
 /* ---------- Which works are visible ---------- */
 // Pengunjung hanya melihat karya yang sudah punya gambar.
 // Di Custom Mode semua karya tetap tampil supaya gambarnya bisa ditambah.
-const isPublished = (work) => state.editMode || !!work.img
+const isPublished = (work) => state.editMode || !!work.img || !!work.video
 
 const renderWall = () => {
   const wrap = document.querySelector('#wall-cols')
@@ -410,8 +551,10 @@ const renderWall = () => {
   items.forEach((item, k) => columns[k % colCount].push(item))
 
   const visible = columns.filter((c) => c.length)
+  const isStatic = wallIsStatic()
   wrap.style.gridTemplateColumns = `repeat(${visible.length}, 1fr)`
   wrap.dataset.cols = String(visible.length)
+  wrap.dataset.static = isStatic ? '1' : '0'
 
   visible.forEach((list, ci) => {
     const col = document.createElement('div')
@@ -422,7 +565,8 @@ const renderWall = () => {
     track.style.animationDuration = `${40 + ci * 7}s`
 
     list.forEach(({ w, i }) => track.appendChild(createWallTile(w, i)))
-    list.forEach(({ w, i }) => track.appendChild(createWallTile(w, i)))
+    // duplikasi hanya dipakai untuk looping halus di layar besar
+    if (!isStatic) list.forEach(({ w, i }) => track.appendChild(createWallTile(w, i)))
 
     col.appendChild(track)
     wrap.appendChild(col)
@@ -458,21 +602,36 @@ const renderWork = () => {
   tabs.appendChild(all)
 
   content.categories.forEach((c, ci) => {
+    const wrap = document.createElement('span')
+    wrap.className = 'work-tab-wrap'
+
     const a = document.createElement('a')
     a.className = 'work-tab' + (c.id === catId ? ' is-active' : '')
     a.href = `#/work/${c.id}`
     a.textContent = c.label
     a.dataset.edit = ed(`categories.${ci}.label`)
-    tabs.appendChild(a)
+    wrap.appendChild(a)
+
+    const del = document.createElement('button')
+    del.className = 'edit-ctrl edit-only work-tab-del'
+    del.type = 'button'
+    del.dataset.action = 'del'
+    del.dataset.list = 'categories'
+    del.dataset.index = String(ci)
+    del.setAttribute('aria-label', `Delete category ${c.label}`)
+    del.textContent = '×'
+    wrap.appendChild(del)
+
+    tabs.appendChild(wrap)
   })
 
-  const addWork = document.createElement('button')
-  addWork.className = 'edit-ctrl edit-only'
-  addWork.type = 'button'
-  addWork.dataset.action = 'add'
-  addWork.dataset.list = 'works'
-  addWork.textContent = '+ Work'
-  tabs.appendChild(addWork)
+  const addCat = document.createElement('button')
+  addCat.className = 'edit-ctrl edit-only'
+  addCat.type = 'button'
+  addCat.dataset.action = 'add'
+  addCat.dataset.list = 'categories'
+  addCat.textContent = '+ Category'
+  tabs.appendChild(addCat)
 
   const list = content.works
     .map((w, i) => ({ w, i }))
@@ -480,6 +639,18 @@ const renderWork = () => {
 
   const grid = document.querySelector('#work-grid')
   renderGrid(grid, list, ({ w, i }, n) => createWorkCard(w, i, n + 1))
+
+  // tombol + sebagai kotak di dalam grid, sebelah karya
+  if (state.editMode) {
+    const add = document.createElement('button')
+    add.type = 'button'
+    add.className = 'work-add-tile'
+    add.dataset.action = 'add'
+    add.dataset.list = 'works'
+    add.setAttribute('aria-label', 'Add work')
+    add.innerHTML = '<span aria-hidden="true">+</span>'
+    grid.appendChild(add)
+  }
 
   const empty = document.querySelector('#work-empty')
   if (empty) empty.hidden = list.length > 0
@@ -629,22 +800,27 @@ const renderAbout = () => {
 }
 
 /* ---------- Ticker & footer ---------- */
+// Isi ticker dibuat otomatis dari kategori + judul karya, jadi tidak
+// perlu diisi manual lagi. Kalau belum ada karya, pakai kategori saja.
+const tickerItems = () => {
+  const seen = new Set()
+  const out = []
+  const push = (t) => {
+    const s = String(t || '').trim()
+    if (!s || seen.has(s.toLowerCase())) return
+    seen.add(s.toLowerCase())
+    out.push(s)
+  }
+  content.categories.forEach((c) => push(c.label))
+  content.works.forEach((w) => push(w.title))
+  return out.length ? out : ['Portfolio']
+}
+
 const renderTicker = () => {
   const track = document.querySelector('#marquee-track')
-  const html = content.marquee
-    .map((m, i) => `<span data-edit="${ed(`marquee.${i}`)}">${esc(m)}</span>`)
-    .join('')
+  const items = tickerItems()
+  const html = items.map((m) => `<span>${esc(m)}</span>`).join('')
   track.innerHTML = html + html
-
-  const parent = track.parentElement
-  parent.querySelectorAll(':scope > .edit-ctrl.add').forEach((n) => n.remove())
-  const add = document.createElement('button')
-  add.className = 'edit-ctrl edit-only add'
-  add.type = 'button'
-  add.dataset.action = 'add'
-  add.dataset.list = 'marquee'
-  add.textContent = '+ Item'
-  parent.appendChild(add)
 }
 
 const renderFooter = () => {
@@ -653,7 +829,6 @@ const renderFooter = () => {
   el.innerHTML = `
     <p class="label dim" data-edit="${ed('footer.left')}">${esc(String(content.footer.left).replace('{year}', year))}</p>
     <p class="label dim" data-edit="${ed('footer.center')}">${esc(content.footer.center)}</p>
-    <a class="label" href="#/" data-edit="${ed('footer.back')}">${esc(content.footer.back)}</a>
   `
 }
 
@@ -664,6 +839,12 @@ const renderAboutPhoto = () => {
   const img = fig.querySelector('.about-photo-img')
   const photo = content.about.photo
   fig.classList.toggle('is-empty', !photo)
+  // foto gagal dimuat -> perlakukan sama seperti tidak ada foto,
+  // supaya tidak muncul ikon gambar rusak
+  img.onerror = () => {
+    img.hidden = true
+    fig.classList.add('is-empty')
+  }
   if (photo) {
     if (img.getAttribute('src') !== photo) img.src = photo
     img.hidden = false
@@ -708,10 +889,25 @@ const closeNav = () => {
   t.textContent = UI[lang.current].menu
 }
 
+const moveNavIndicator = () => {
+  const nav = document.querySelector('#nav')
+  const dot = document.querySelector('#nav-indicator')
+  const active = document.querySelector('[data-nav].active')
+  if (!nav || !dot || !active) {
+    if (dot) dot.style.opacity = '0'
+    return
+  }
+  dot.style.opacity = '1'
+  const pad = 4
+  dot.style.width = `${active.offsetWidth + pad * 2}px`
+  dot.style.transform = `translateX(${active.offsetLeft - pad}px)`
+}
+
 const setActiveNav = (key) => {
   document.querySelectorAll('[data-nav]').forEach((a) => {
     a.classList.toggle('active', a.dataset.nav === key)
   })
+  moveNavIndicator()
 }
 
 const updateDocTitle = () => {
@@ -815,15 +1011,17 @@ const workFromEvent = (e) => {
   const trigger = e.target.closest('[data-work]')
   if (!trigger || state.editMode) return null
   const work = content.works[Number(trigger.dataset.work)]
-  if (!work || !work.img) return null
-  return { work, trigger }
+  if (!work || (!work.img && !work.video)) return null
+  // zoom out of the thumbnail itself
+  const source = trigger.querySelector('.work-thumb, .wall-img, .work-video') || trigger
+  return { work, source }
 }
 
 document.addEventListener('click', (e) => {
   const found = workFromEvent(e)
   if (!found) return
   e.preventDefault()
-  lightbox.open(found.work)
+  lightbox.open(found.work, found.source)
 })
 
 document.addEventListener('keydown', (e) => {
@@ -831,10 +1029,19 @@ document.addEventListener('keydown', (e) => {
   const active = document.activeElement
   if (!active || !active.matches || !active.matches('[data-work]')) return
   const work = content.works[Number(active.dataset.work)]
-  if (!work || !work.img || state.editMode) return
+  if (!work || (!work.img && !work.video) || state.editMode) return
   e.preventDefault()
-  lightbox.open(work)
+  const source = active.querySelector('.work-thumb') || active
+  lightbox.open(work, source)
 })
+
+/* ---------- Back to top ---------- */
+const backToTop = document.querySelector('.back-to-top')
+if (backToTop) {
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  })
+}
 
 /* ---------- Email: keep mailto: in sync while editing ---------- */
 const syncMailto = () => {
@@ -932,7 +1139,10 @@ const boot = async () => {
     resizeTimer = setTimeout(() => {
       const wrap = document.querySelector('#wall-cols')
       const n = content.works.filter((w) => w.featured !== false && isPublished(w)).length
-      if (String(wallColCount(n)) !== wrap.dataset.cols) renderWall()
+      const colsChanged = String(wallColCount(n)) !== wrap.dataset.cols
+      const modeChanged = (wallIsStatic() ? '1' : '0') !== wrap.dataset.static
+      if (colsChanged || modeChanged) renderWall()
+      moveNavIndicator()
     }, 200)
   })
 

@@ -301,19 +301,45 @@ export function initEditor(app) {
     }
   })
 
+  const slugify = (s) =>
+  String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'category'
+
   /* ---------- Control actions (buttons) ---------- */
   const addItem = (list) => {
     const c = app.content
     const year = new Date().getFullYear()
     if (list === 'works') {
-      c.works.push({ title: 'New Work', cat: c.categories[0].id, year, img: null, featured: true })
+      const cat = c.categories[0] ? c.categories[0].id : ''
+      c.works.push({ title: 'New Work', cat, year, img: null, video: null, featured: true })
+      app.save()
+      app.renderAll()
+      //.scroll ke karya yang baru ditambahkan supaya kelihatan
+      requestAnimationFrame(() => {
+        const cards = document.querySelectorAll('#work-grid .work-card')
+        const last = cards[cards.length - 1]
+        if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+      return
+    }
+    if (list === 'categories') {
+      const base = 'New Category'
+      let n = 1
+      let label = base
+      const used = new Set(c.categories.map((x) => x.id))
+      while (used.has(slugify(label))) {
+        n += 1
+        label = `${base} ${n}`
+      }
+      c.categories.push({ id: slugify(label), label })
     } else if (list === 'experience') {
       // title sengaja kosong -> entri ini belum tampil sampai diketik
       c.experience.push({ title: '', org: '', period: '', desc: '', img: null })
     } else if (list === 'services') {
       c.services.push({ title: 'New Service', desc: 'Service description...' })
-    } else if (list === 'marquee') {
-      c.marquee.push('New Item')
     } else if (list === 'contact.socials') {
       c.contact.socials.push({ label: 'New Social', url: 'https://' })
     } else {
@@ -327,7 +353,28 @@ export function initEditor(app) {
 
   const delItem = (list, index) => {
     const arr = app.getByPath(app.content, list)
-    if (Array.isArray(arr)) arr.splice(index, 1)
+    if (!Array.isArray(arr)) return
+    const label =
+      arr[index] && typeof arr[index] === 'object' ? arr[index].title || 'item' : 'item'
+    if (!confirm(`Delete "${label}"? This cannot be undone.`)) return
+
+    if (list === 'categories' && arr.length <= 1) {
+      notify('Keep at least one category.')
+      return
+    }
+
+    if (list === 'categories') {
+      const removed = arr[index]
+      arr.splice(index, 1)
+      // karya yang memakai kategori ini dipindah ke kategori pertama
+      const fallback = arr[0].id
+      app.content.works.forEach((w) => {
+        if (w.cat === removed.id) w.cat = fallback
+      })
+    } else {
+      arr.splice(index, 1)
+    }
+
     app.save()
     app.renderAll()
   }
@@ -339,9 +386,16 @@ export function initEditor(app) {
     if (actionBtn) {
       e.preventDefault()
       e.stopPropagation()
+      e.stopImmediatePropagation()
       const { action, list, index } = actionBtn.dataset
-      if (action === 'add') addItem(list)
-      if (action === 'del') delItem(list, Number(index))
+      try {
+        if (action === 'add') addItem(list)
+        if (action === 'del') delItem(list, Number(index))
+        if (action === 'pick-video') pickVideo(Number(index))
+      } catch (err) {
+        notify(`Could not apply that change: ${err.message}`)
+        console.error(err)
+      }
       return
     }
 
@@ -442,10 +496,35 @@ export function initEditor(app) {
   const pickImage = (path) => {
     pendingPath = path
     fileInput.value = ''
+    fileInput.accept = 'image/*'
+    fileInput.click()
+  }
+
+  /* Videos are far too large to embed in content.json, so we only store the
+     file name as a path. The user then drops the file into public/work/. */
+  let pendingVideoIndex = null
+
+  const pickVideo = (index) => {
+    pendingVideoIndex = index
+    fileInput.value = ''
+    fileInput.accept = 'video/*'
     fileInput.click()
   }
 
   fileInput.addEventListener('change', async () => {
+    if (pendingVideoIndex !== null) {
+      const file = fileInput.files?.[0]
+      const idx = pendingVideoIndex
+      pendingVideoIndex = null
+      if (!file) return
+      const path = `/work/${file.name}`
+      app.writePath(`works.${idx}.video`, path)
+      app.save()
+      app.renderAll()
+      notify(`Video set to "${path}" — now copy your file into the public/work folder.`)
+      return
+    }
+
     const file = fileInput.files?.[0]
     if (!file || !pendingPath) return
     try {
