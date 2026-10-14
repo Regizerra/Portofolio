@@ -882,14 +882,23 @@ const hideAllPages = () => {
   aboutPage.hidden = true
 }
 
+const setMenuLabel = (text) => {
+  const label = document.querySelector('.menu-toggle .menu-label')
+  if (label) label.textContent = text
+  const t = document.querySelector('.menu-toggle')
+  if (t) t.setAttribute('aria-label', text)
+}
+
 const closeNav = () => {
   document.querySelector('#nav').classList.remove('open')
   const t = document.querySelector('.menu-toggle')
   t.setAttribute('aria-expanded', 'false')
-  t.textContent = UI[lang.current].menu
+  t.classList.remove('is-animating')
+  setMenuLabel(UI[lang.current].menu)
 }
 
 const moveNavIndicator = () => {
+  const pad = 4
   const nav = document.querySelector('#nav')
   const dot = document.querySelector('#nav-indicator')
   const active = document.querySelector('[data-nav].active')
@@ -898,9 +907,20 @@ const moveNavIndicator = () => {
     return
   }
   dot.style.opacity = '1'
-  const pad = 4
-  dot.style.width = `${active.offsetWidth + pad * 2}px`
-  dot.style.transform = `translateX(${active.offsetLeft - pad}px)`
+  // di HP menu-nya vertikal -> penanda meluncur ke bawah
+  const vertical = window.matchMedia('(max-width: 740px)').matches
+  if (vertical) {
+    // 80% lebar baris, dipusatkan
+    const w = Math.round(active.offsetWidth * 0.8)
+    const x = active.offsetLeft + Math.round((active.offsetWidth - w) / 2)
+    dot.style.width = `${w}px`
+    dot.style.height = `${active.offsetHeight}px`
+    dot.style.transform = `translate(${x}px, ${active.offsetTop}px)`
+  } else {
+    dot.style.height = ''
+    dot.style.width = `${active.offsetWidth + pad * 2}px`
+    dot.style.transform = `translateX(${active.offsetLeft - pad}px)`
+  }
 }
 
 const setActiveNav = (key) => {
@@ -1003,7 +1023,19 @@ document.querySelector('.menu-toggle').addEventListener('click', (e) => {
   const nav = document.querySelector('#nav')
   const open = nav.classList.toggle('open')
   e.currentTarget.setAttribute('aria-expanded', String(open))
-  e.currentTarget.textContent = open ? UI[lang.current].close : UI[lang.current].menu
+  setMenuLabel(open ? UI[lang.current].close : UI[lang.current].menu)
+
+  // posisi penanda ikut dihitung ulang tiap menu dibuka/tutup
+  requestAnimationFrame(moveNavIndicator)
+
+  // ikon mengikuti status menu: jadi X saat terbuka, balik ke garis saat ditutup
+  const btn = e.currentTarget
+  btn.classList.remove('is-animating')
+  // paksa reflow supaya animasi bisa diputar ulang setiap klik
+  void btn.offsetWidth
+  // buka -> putar maju ke X dan TAHAN di situ.
+  // tutup -> kelas dilepas, transformasi bertransisi balik ke garis (reverse).
+  btn.classList.toggle('is-animating', open)
 })
 
 /* ---------- Open lightbox from a work ---------- */

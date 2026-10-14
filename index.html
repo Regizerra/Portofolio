@@ -26,8 +26,30 @@
 
         <p class="header-tunnel" data-edit="brand.tunnel">Creative Studio</p>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav" data-i18n="menu">
-          Menu
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menu">
+          <svg
+            class="menu-icon"
+            fill="currentColor"
+            stroke="none"
+            stroke-width="0"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              class="menu-line line-1"
+              d="m3.45,8.83c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31L14.71,2.08c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31L3.84,8.75c-.13.05-.25.08-.38.08Z"
+            ></path>
+            <path
+              class="menu-line line-2"
+              d="m2.02,17.13c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31L21.6,6.94c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31L2.4,17.06c-.13.05-.25.08-.38.08Z"
+            ></path>
+            <path
+              class="menu-line line-3"
+              d="m8.91,21.99c-.39,0-.76-.23-.92-.62-.21-.51.03-1.1.54-1.31l11.64-4.82c.51-.21,1.1.03,1.31.54.21.51-.03,1.1-.54,1.31l-11.64,4.82c-.13.05-.25.08-.38.08Z"
+            ></path>
+          </svg>
+          <span class="menu-label" aria-hidden="true">Menu</span>
         </button>
 
         <nav class="nav" id="nav" aria-label="Main navigation">
@@ -35,9 +57,11 @@
           <a href="#/work" data-nav="work" data-i18n="work">Work</a>
           <a href="#/experience" data-nav="experience" data-i18n="experience">Experience</a>
           <a href="#/about" data-nav="about" data-i18n="about">About</a>
-          <a
-            class="Btn Btn-mail"
-            id="nav-email"
+          <div class="nav-extra">
+          <div class="nav-social">
+            <a
+              class="Btn Btn-mail"
+              id="nav-email"
             data-mailto
             href="mailto:email@you.com"
             aria-label="Email"
@@ -104,6 +128,7 @@
               </svg>
             </span>
           </a>
+          </div>
           <div class="lang-switch" id="lang-switch" role="group" aria-label="Language" data-active="en">
             <span class="lang-switch-thumb" aria-hidden="true"></span>
             <button type="button" class="lang-opt" data-lang-btn="en" title="English" aria-label="Switch to English">
@@ -128,6 +153,7 @@
               <span class="lang-code">ID</span>
             </button>
           </div>
+        </div>
         </nav>
       </div>
     </header>
