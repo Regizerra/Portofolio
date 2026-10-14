@@ -125,9 +125,16 @@ export function initEditor(app) {
   const triggerLabel = trigger.querySelector('.edit-trigger-label')
   const triggerTip = trigger.querySelector('.edit-trigger-tip')
   let ctrlHeld = false
+  let stickerMode = false
 
   const paintTrigger = () => {
     trigger.classList.toggle('is-admin', ctrlHeld)
+    if (stickerMode) {
+      triggerLabel.textContent = '😈'
+      triggerTip.textContent = 'Sticker mode'
+      trigger.setAttribute('aria-label', 'Sticker mode')
+      return
+    }
     triggerLabel.textContent = ctrlHeld ? '⚙' : 'CV'
     triggerTip.textContent = ctrlHeld ? 'Administrator' : 'Download CV'
     trigger.setAttribute('aria-label', ctrlHeld ? 'Administrator' : 'Download CV')
@@ -153,6 +160,12 @@ export function initEditor(app) {
   })
 
   trigger.addEventListener('click', (e) => {
+    // Shift + klik -> mode stiker (bukan mode admin)
+    if (e.shiftKey) {
+      e.preventDefault()
+      setStickerMode(!stickerMode)
+      return
+    }
     if (ctrlHeld) {
       e.preventDefault()
       openModal()
@@ -255,6 +268,333 @@ export function initEditor(app) {
 
     if (tool === 'exit') exitEdit()
   })
+
+  /* ---------- Sticker mode ----------
+     Aktif: Shift + klik tombol CV (tombol yang sama dengan admin).
+     Mode ini BUKAN Custom Mode:visitor tidak pernah melihat kontrolnya. */
+
+  const EVIL_ICON =
+    "data:image/svg+xml;charset=utf-8," +
+    encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="50" y="50" font-size="88" text-anchor="middle" dominant-baseline="central">&#128520;</text></svg>`,
+    )
+
+  let selectedSticker = -1
+
+  const stickerPanel = document.createElement('div')
+  stickerPanel.className = 'sticker-panel'
+  stickerPanel.hidden = true
+  stickerPanel.innerHTML = `
+    <span class="sticker-panel-title">😈 Sticker</span>
+    <label>Size <input type="range" min="40" max="420" step="2" data-st="size"><output data-st-out>120</output></label>
+    <label>Depth
+      <select data-st="layer">
+        <option value="front">Front</option>
+        <option value="back">Back</option>
+      </select>
+    </label>
+    <button type="button" data-st="add">+ Stiker</button>
+    <button type="button" data-st="image">Ganti gambar</button>
+    <button type="button" data-st="undo">↶ Undo</button>
+    <button type="button" data-st="delete" class="danger">Hapus</button>
+    <button type="button" data-st="done">Selesai</button>`
+  document.body.appendChild(stickerPanel)
+
+  const currentPage = () => {
+    if (document.querySelector('#about-page')?.hidden === false) return 'about'
+    if (document.querySelector('#experience-page')?.hidden === false) return 'experience'
+    if (document.querySelector('#work-page')?.hidden === false) return 'work'
+    return 'home'
+  }
+
+  const list = () => (Array.isArray(app.content.stickers) ? app.content.stickers : [])
+
+  const syncPanel = () => {
+    const items = list()
+    const s = items[selectedSticker]
+
+    // panel selalu tampil selama mode stiker aktif, walau belum ada
+    // stiker yang dipilih (supaya tombol "+ Stiker" selalu bisa dipakai)
+    stickerPanel.hidden = !stickerMode
+    if (!s) {
+      stickerPanel.querySelectorAll('[data-st="size"], [data-st="layer"], [data-st="image"], [data-st="delete"], [data-st-out]').forEach((n) => {
+        n.disabled = true
+        if (n.tagName === 'OUTPUT') n.textContent = '—'
+      })
+      return
+    }
+
+    stickerPanel.querySelectorAll('[data-st="size"], [data-st="layer"], [data-st="image"], [data-st="delete"]').forEach((n) => {
+      n.disabled = false
+    })
+    stickerPanel.querySelector('[data-st="size"]').value = String(Number(s.size) || 120)
+    stickerPanel.querySelector('[data-st-out]').textContent = String(Number(s.size) || 120)
+    stickerPanel.querySelector('[data-st="layer"]').value = s.layer === 'back' ? 'back' : 'front'
+  }
+
+  const paintStickers = () => {
+    document.querySelectorAll('.sticker').forEach((el) => {
+      el.classList.toggle('is-selected', Number(el.dataset.sticker) === selectedSticker)
+    })
+    syncPanel()
+  }
+
+  const setStickerMode = (on) => {
+    stickerMode = on
+    selectedSticker = -1
+    document.body.classList.toggle('sticker-mode', on)
+    if (!on) stickerPanel.hidden = true
+    paintTrigger()
+    notify(on ? 'Sticker mode aktif — klik di halaman untuk menempel stiker.' : 'Sticker mode selesai.')
+    app.renderAll()
+    paintStickers()
+  }
+
+  const selectSticker = (i) => {
+    selectedSticker = i
+    paintStickers()
+  }
+
+  // ---- Menambah stiker lewat tombol panel (tidak perlu klik halaman) ----
+  const addSticker = () => {
+    snapshotStickers()
+    app.content.stickers = list()
+    app.content.stickers.push({
+      page: currentPage(),
+      src: EVIL_ICON,
+      x: 50,
+      y: 30,
+      size: 120,
+      layer: 'front',
+    })
+    selectedSticker = app.content.stickers.length - 1
+    app.save()
+    app.renderAll()
+    paintStickers()
+    notify('Stiker ditambahkan di tengah halaman — seret untuk memindah.')
+  }
+
+  // ---- Undo: snapshot sebelum setiap perubahan ----
+  const stickerUndo = []
+
+  const snapshotStickers = () => {
+    stickerUndo.push(JSON.stringify(list()))
+    if (stickerUndo.length > 50) stickerUndo.shift()
+  }
+
+  const undoSticker = () => {
+    const prev = stickerUndo.pop()
+    if (prev == null) {
+      notify('Tidak ada yang bisa di-undo.')
+      return
+    }
+    app.content.stickers = JSON.parse(prev)
+    selectedSticker = -1
+    app.save()
+    app.renderAll()
+    paintStickers()
+    notify('Undo.')
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (!stickerMode) return
+    if (!(e.ctrlKey || e.metaKey) || e.key.toLowerCase() !== 'z') return
+    const t = e.target
+    if (t && (t.matches('input, textarea, select') || t.isContentEditable)) return
+    e.preventDefault()
+    undoSticker()
+  })
+
+  // ---- Menempel stiker baru ----
+  let pressAt = null
+  let suppressClick = false
+
+  document.addEventListener('pointerdown', (e) => {
+    if (!stickerMode) return
+    pressAt = { x: e.clientX, y: e.clientY }
+  })
+
+  document.addEventListener('click', (e) => {
+    if (!stickerMode) return
+
+    // lepas klik setelaheseret/geser -> jangan dianggaparmacyat stiker
+    if (pressAt) {
+      const moved = Math.hypot(e.clientX - pressAt.x, e.clientY - pressAt.y)
+      pressAt = null
+      if (moved > 4) {
+        suppressClick = true
+        return
+      }
+    }
+    if (suppressClick) {
+      suppressClick = false
+      return
+    }
+
+    const existing = e.target.closest('.sticker')
+    if (existing) {
+      e.preventDefault()
+      e.stopPropagation()
+      selectSticker(Number(existing.dataset.sticker))
+      return
+    }
+
+    // Di mode stiker, sentuhan hanya berlaku untuk stiker.
+    // Area kosong tidak menambah apa pun (mencegah stiker nyasar).
+    if (e.target.closest('button, a, input, select, textarea, label')) return
+    e.preventDefault()
+    e.stopPropagation()
+  })
+
+  // ---- Seret untuk memindah ----
+  let drag = null
+  document.addEventListener('pointerdown', (e) => {
+    if (!stickerMode) return
+    const el = e.target.closest('.sticker')
+    if (!el) return
+    const i = Number(el.dataset.sticker)
+    const layer = el.parentElement
+    const host = layer.parentElement
+    selectSticker(i)
+    e.preventDefault()
+    e.stopPropagation()
+    const hostRect = host.getBoundingClientRect()
+    const elRect = el.getBoundingClientRect()
+    // sticker dipusatkan dengan translate(-50%,-50%), jadi titik acunya
+    // adalah tengahnya — tanpa ini sticker meloncatfefterhalf lebarnya
+    drag = {
+      i,
+      layer,
+      host,
+      startX: e.clientX,
+      startY: e.clientY,
+      baseLeft: elRect.left - hostRect.left + elRect.width / 2,
+      baseTop: elRect.top - hostRect.top + elRect.height / 2,
+      hostW: hostRect.width,
+      hostH: hostRect.height,
+    }
+  })
+
+  document.addEventListener('pointermove', (e) => {
+    if (!drag) return
+    const left = drag.baseLeft + (e.clientX - drag.startX)
+    const top = drag.baseTop + (e.clientY - drag.startY)
+    const el = drag.layer.querySelector(`.sticker[data-sticker="${drag.i}"]`)
+    if (!el) return
+    el.style.left = `${Math.max(0, Math.min(100, (left / drag.hostW) * 100))}%`
+    el.style.top = `${Math.max(0, Math.min(100, (top / drag.hostH) * 100))}%`
+  })
+
+  const endDrag = () => {
+    if (!drag) return
+    const el = drag.layer.querySelector(`.sticker[data-sticker="${drag.i}"]`)
+    if (el) {
+      const s = list()[drag.i]
+      if (s) {
+        const nx = Math.round(parseFloat(el.style.left) * 10) / 10
+        const ny = Math.round(parseFloat(el.style.top) * 10) / 10
+        if (nx !== s.x || ny !== s.y) snapshotStickers()
+        s.x = nx
+        s.y = ny
+        app.save()
+      }
+    }
+    drag = null
+  }
+  document.addEventListener('pointerup', endDrag)
+  document.addEventListener('pointercancel', endDrag)
+
+  // ---- Panel kontrol stiker ----
+  stickerPanel.addEventListener('input', (e) => {
+    if (selectedSticker < 0) return
+    const range = e.target.closest('[data-st="size"]')
+    if (!range) return
+    const v = Number(range.value)
+    list()[selectedSticker].size = v
+    stickerPanel.querySelector('[data-st-out]').textContent = String(v)
+    const el = document.querySelector(`.sticker[data-sticker="${selectedSticker}"]`)
+    if (el) el.style.width = `${v}px`
+  })
+
+  stickerPanel.addEventListener('change', (e) => {
+    if (selectedSticker < 0) return
+    const sel = e.target.closest('[data-st="layer"]')
+    const range = e.target.closest('[data-st="size"]')
+    if (range) {
+      snapshotStickers()
+      const v = Number(range.value)
+      list()[selectedSticker].size = v
+      app.save()
+      return
+    }
+    if (!sel) return
+    snapshotStickers()
+    list()[selectedSticker].layer = sel.value
+    app.save()
+    app.renderAll()
+    paintStickers()
+  })
+
+  stickerPanel.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-st]')
+    if (!btn || btn.tagName !== 'BUTTON' || btn.disabled) return
+    const action = btn.dataset.st
+
+    if (action === 'image') {
+      snapshotStickers()
+      pickImage(`stickers.${selectedSticker}.src`)
+      return
+    }
+    if (action === 'add') {
+      addSticker()
+      return
+    }
+    if (action === 'delete') {
+      snapshotStickers()
+      list().splice(selectedSticker, 1)
+      selectedSticker = -1
+      app.save()
+      app.renderAll()
+      paintStickers()
+      return
+    }
+    if (action === 'undo') {
+      undoSticker()
+      return
+    }
+    if (action === 'done') setStickerMode(false)
+  })
+
+  // ---- Panel bisa diseret ke mana saja lewat judulnya ----
+  let panelDrag = null
+  const panelTitle = stickerPanel.querySelector('.sticker-panel-title')
+
+  panelTitle.addEventListener('pointerdown', (e) => {
+    e.preventDefault()
+    const r = stickerPanel.getBoundingClientRect()
+    panelDrag = { dx: e.clientX - r.left, dy: e.clientY - r.top, w: r.width, h: r.height }
+    stickerPanel.classList.add('is-dragging')
+    panelTitle.setPointerCapture?.(e.pointerId)
+  })
+
+  panelTitle.addEventListener('pointermove', (e) => {
+    if (!panelDrag) return
+    const maxX = window.innerWidth - panelDrag.w - 8
+    const maxY = window.innerHeight - panelDrag.h - 8
+    const x = Math.max(8, Math.min(maxX, e.clientX - panelDrag.dx))
+    const y = Math.max(8, Math.min(maxY, e.clientY - panelDrag.dy))
+    stickerPanel.style.left = `${x}px`
+    stickerPanel.style.top = `${y}px`
+    stickerPanel.style.bottom = 'auto'
+  })
+
+  const endPanelDrag = () => {
+    panelDrag = null
+    stickerPanel.classList.remove('is-dragging')
+  }
+  panelTitle.addEventListener('pointerup', endPanelDrag)
+  panelTitle.addEventListener('pointercancel', endPanelDrag)
+  panelTitle.addEventListener('lostpointercapture', endPanelDrag)
 
   /* ---------- Text editing ---------- */
   document.addEventListener('mousedown', (e) => {

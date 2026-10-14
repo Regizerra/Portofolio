@@ -854,6 +854,64 @@ const renderAboutPhoto = () => {
   }
 }
 
+/* ---------- Stickers ----------
+   Gambar yang "dipasak" di halaman tertentu: ikut scroll (absolute),
+   posisi & ukuran disimpan sendiri, bisa di depan atau di belakang. */
+
+const STICKER_HOSTS = {
+  home: '#home-main',
+  work: '#work-page',
+  experience: '#experience-page',
+  about: '#about-page',
+}
+
+export const stickerList = () => (Array.isArray(content.stickers) ? content.stickers : [])
+
+const renderStickers = () => {
+  document.querySelectorAll('.sticker-layer').forEach((n) => n.remove())
+
+  const list = stickerList()
+  if (!list.length) return
+
+  const byPage = {}
+  list.forEach((s, i) => {
+    const page = STICKER_HOSTS[s.page] ? s.page : 'home'
+    if (!byPage[page]) byPage[page] = []
+    byPage[page].push({ s, i })
+  })
+
+  Object.keys(byPage).forEach((page) => {
+    const host = document.querySelector(STICKER_HOSTS[page])
+    if (!host) return
+
+    const hasBack = byPage[page].some(({ s }) => s.layer !== 'front')
+    const hasFront = byPage[page].some(({ s }) => s.layer === 'front')
+
+    if (hasBack) host.appendChild(makeStickerLayer('back', byPage[page]))
+    if (hasFront) host.appendChild(makeStickerLayer('front', byPage[page]))
+  })
+}
+
+const makeStickerLayer = (layer, items) => {
+  const wrap = document.createElement('div')
+  wrap.className = `sticker-layer sticker-layer--${layer}`
+  items.forEach(({ s, i }) => {
+    if ((s.layer === 'front') !== (layer === 'front')) return
+    const el = document.createElement('img')
+    el.className = 'sticker'
+    el.src = s.src
+    el.alt = ''
+    el.draggable = false
+    el.dataset.sticker = String(i)
+    el.dataset.img = `stickers.${i}.src`
+    el.style.left = `${Number(s.x) || 0}%`
+    el.style.top = `${Number(s.y) || 0}%`
+    el.style.width = `${Number(s.size) || 120}px`
+    wrap.appendChild(el)
+  })
+  return wrap
+}
+
 /* ---------- Render all ---------- */
 const renderAll = () => {
   applyTheme()
@@ -864,6 +922,7 @@ const renderAll = () => {
   renderAbout()
   renderAboutPhoto()
   renderFooter()
+  renderStickers()
   syncMailto()
   applyLang()
   applyContentToDOM()
@@ -1093,6 +1152,7 @@ const app = {
   clearLocal,
   applyTheme,
   renderAll,
+  stickerList,
   renderWall,
   renderWork,
   renderExperience,

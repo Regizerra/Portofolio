@@ -54,6 +54,13 @@ export const defaultContent = {
   // period: contoh "2023 — Present" atau "Jan 2024 · Des 2024"
   experience: [],
 
+  // Stiker: gambar yang "dipasak" di halaman tertentu.
+  // page : 'home' | 'work' | 'experience' | 'about'
+  // x, y : posisi persen (0-100) relatif terhadap halaman
+  // size : ukuran px (dipakai di semua perangkat)
+  // layer: 'front' (di atas konten) | 'back' (di belakang konten)
+  stickers: [],
+
   categories: [
     {
       id: 'graphic-design',

@@ -2726,6 +2726,153 @@ body.edit-mode .about-photo.is-empty {
 }
 
 /* ============================================================
+   STICKERS — gambar yang "dipasak" di halaman
+   ============================================================ */
+
+.page,
+#home-main {
+  position: relative;
+  isolation: isolate;
+}
+
+/* konten biasa di atas layer belakang */
+.page > *:not(.sticker-layer),
+#home-main > *:not(.sticker-layer) {
+  position: relative;
+  z-index: 1;
+}
+
+.sticker-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sticker-layer--front {
+  z-index: 60;
+}
+
+.sticker {
+  position: absolute;
+  display: block;
+  height: auto;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ===== Mode stiker (hanya untuk pemilik situs) ===== */
+
+.sticker-mode .sticker {
+  pointer-events: auto;
+  cursor: grab;
+  outline: 1px dashed rgba(0, 0, 0, 0.35);
+  outline-offset: 4px;
+}
+
+/* saat mode stiker aktif, layer "back" dinaikkan agar bisa diklik */
+body.sticker-mode .sticker-layer--back {
+  z-index: 70;
+}
+
+.sticker-mode .sticker:active {
+  cursor: grabbing;
+}
+
+.sticker-mode .sticker.is-selected {
+  outline: 2px solid #000;
+}
+
+.sticker-panel {
+  position: fixed;
+  left: 14px;
+  bottom: 14px;
+  z-index: 130;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  width: max-content;
+  max-width: calc(100vw - 28px);
+  padding: 8px 10px;
+  background: #111;
+  color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.8);
+  font-size: 12px;
+}
+
+.sticker-panel-title {
+  font-weight: 700;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.sticker-panel-title:active {
+  cursor: grabbing;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.sticker-panel.is-dragging {
+  opacity: 0.92;
+}
+
+.sticker-panel label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.sticker-panel input[type="range"] {
+  width: 84px;
+  accent-color: #fff;
+}
+
+.sticker-panel output {
+  min-width: 30px;
+  display: inline-block;
+  text-align: right;
+}
+
+.sticker-panel select,
+.sticker-panel button {
+  font: inherit;
+  padding: 6px 9px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sticker-panel button:disabled,
+.sticker-panel select:disabled,
+.sticker-panel input:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.sticker-panel button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.sticker-panel button.danger {
+  background: #d92a2a;
+  border-color: #d92a2a;
+}
+
+.sticker-mode .edit-trigger {
+  border-color: #111;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), 0 0 0 5px #111;
+}
+
+/* ============================================================
    PERBAIKAN MOBILE (Android / HP)
    ============================================================ */
 
