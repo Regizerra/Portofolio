@@ -20,6 +20,10 @@
   --grid-size: 55px;
   --grid-color: rgba(0, 0, 0, 0.06);
 
+  /* header melayang (desktop) */
+  --pill-inset: 30px; /* jarak isi dari lekukan bulat pil */
+  --ease-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
   --sans: "Helvetica Neue", Helvetica, Arial, "Segoe UI", system-ui, sans-serif;
 
   color-scheme: light;
@@ -193,19 +197,150 @@ img {
 }
 
 .site-header.scrolled::before {
-  opacity: 1;
+  opacity: 0;
   background: var(--bg);
   border-bottom: 1px solid var(--line);
+}
+
+/* ---------- Header mengambang (desktop) ----------
+   Saat di-scroll, header menyusut jadi pil bulat yang melayang,
+   persis seperti navbar pada desain referensimu. */
+.site-header::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 10px;
+  left: 50%;
+  right: auto;
+  width: 100%;
+  height: 52px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(1.4);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  border: 1px solid var(--line);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translate(-50%, -12px) scale(0.97);
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    width 0.6s var(--ease-soft),
+    transform 0.6s var(--ease-soft);
+}
+
+/* transisi halus untuk semua yang ikut menyusut */
+@media (min-width: 741px) {
+  .site-header .brand,
+  .site-header .nav a,
+  .site-header .nav button {
+    transition: font-size 0.55s var(--ease-soft);
+  }
+
+  .site-header .Btn,
+  .site-header .Btn-mail {
+    transition:
+      width 0.55s var(--ease-soft),
+      height 0.55s var(--ease-soft);
+  }
+
+  .site-header .Btn .ig-icon,
+  .site-header .Btn-mail .ig-icon {
+    transition:
+      width 0.55s var(--ease-soft),
+      height 0.55s var(--ease-soft);
+  }
+
+  .site-header .nav-indicator {
+    transition:
+      transform 0.55s var(--ease-soft),
+      width 0.55s var(--ease-soft),
+      height 0.55s var(--ease-soft),
+      margin-top 0.55s var(--ease-soft),
+      opacity 0.3s ease;
+  }
+}
+
+@media (min-width: 741px) {
+  .site-header {
+    transition: height 0.6s var(--ease-soft);
+  }
+
+  /* pil melayang: memendek ke tengah, sekitar setengah lebar */
+  .site-header.scrolled::after {
+    opacity: 1;
+    width: 50%;
+    min-width: 640px;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  /* brand mepet di lekukan kiri, grup menu mepet di lekukan kanan.
+     min() karena setbackoff ke tepi pil = (100% - lebar pil) / 2 */
+  .site-header.scrolled .header-inner {
+    padding-left: calc(min(25%, (100% - 640px) / 2) + var(--pill-inset));
+    padding-right: calc(min(25%, (100% - 640px) / 2) + var(--pill-inset) - 4px);
+  }
+
+  .site-header.scrolled .nav {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .site-header.scrolled .lang-switch {
+    margin-left: 0;
+  }
+
+  /* menyusut: tinggi baris ikut mengecil biar konten duduk di dalam pil */
+  .site-header.scrolled {
+    height: 72px;
+  }
+
+  .site-header.scrolled .brand,
+  .site-header.scrolled .nav a,
+  .site-header.scrolled .nav button,
+  .site-header.scrolled .header-tunnel {
+    font-size: 10px;
+  }
+
+  .site-header.scrolled .Btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .site-header.scrolled .Btn .ig-icon {
+    width: 13px;
+    height: 13px;
+  }
+
+  .site-header.scrolled .nav-indicator {
+    height: 26px;
+    margin-top: -13px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--ink) 5%, transparent);
+  }
+
+  /* jarak supaya penanda tidak pernah menempel ke tombol Instagram */
+  .site-header.scrolled .nav > a[data-nav] + a,
+  .site-header.scrolled .nav > a[data-nav]:last-of-type {
+    position: relative;
+  }
+
+  .site-header.scrolled .nav-extra {
+    margin-left: 14px;
+  }
 }
 
 .header-inner {
   position: relative;
   height: 100%;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--pad);
   padding-inline: var(--pad);
+  transition:
+    padding-left 0.6s var(--ease-soft),
+    padding-right 0.6s var(--ease-soft);
 }
 
 .brand {
@@ -374,6 +509,23 @@ img {
     #ff3b3b 62%,
     #a3000c 100%
   );
+}
+
+/* ---------- WhatsApp button (hijau) ---------- */
+.Btn-wa {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.Btn-wa .ig-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.Btn-wa .BG {
+  border-radius: 6px;
+  background: linear-gradient(140deg, #4ce07a 0%, #25d366 38%, #17a95b 72%, #0e7a44 100%);
 }
 
 .Btn-mail:hover .BG {
@@ -1320,7 +1472,10 @@ body.edit-mode .ticker .edit-ctrl.add {
     display: none;
   }
   .header-inner {
-    grid-template-columns: 1fr auto;
+    justify-content: flex-end;
+  }
+  .brand {
+    margin-right: auto;
   }
   /* Menu HP: panel melayang di kanan atas, tepat di bawah tombol MENU */
   .nav {
@@ -1382,6 +1537,7 @@ body.edit-mode .ticker .edit-ctrl.add {
     padding: 13px 2px;
     border-bottom: 1px solid var(--line);
     font-size: 14px;
+    line-height: 1.35;
     letter-spacing: 0.08em;
     display: flex;
     align-items: center;
@@ -2995,14 +3151,20 @@ body.sticker-mode .sticker-layer--back {
     height: 11px !important;
   }
 
-  /* Instagram: persegi sama sisi */
-  .nav #nav-ig {
+  /* Instagram & WhatsApp: persegi sama sisi */
+  .nav #nav-ig,
+  .nav #nav-wa {
     width: 22px !important;
     min-width: 22px !important;
     max-width: 22px !important;
     height: 22px !important;
     min-height: 22px !important;
     max-height: 22px !important;
+  }
+
+  .nav #nav-wa .ig-icon {
+    width: 13px !important;
+    height: 13px !important;
   }
 
   /* tombol social diam di HP: tidak ada hover, jadi tidak perlu berputar */

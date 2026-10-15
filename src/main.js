@@ -965,20 +965,33 @@ const moveNavIndicator = () => {
     if (dot) dot.style.opacity = '0'
     return
   }
+
+  // Font menyusut saat header di-scroll. Kita mengukur saat transisi baru
+  // mulai, jadi ukuran yang terbaca masih ukuran lama. Kita skalakan
+  // sendiri ke ukuran akhir -- tanpa mematikan transisi sama sekali.
+  const fsNow = parseFloat(getComputedStyle(active).fontSize) || 11
+  const fsTarget = header.classList.contains('scrolled') ? 10 : 11
+  const k = fsTarget / fsNow
+
   dot.style.opacity = '1'
   // di HP menu-nya vertikal -> penanda meluncur ke bawah
   const vertical = window.matchMedia('(max-width: 740px)').matches
   if (vertical) {
-    // 80% lebar baris, dipusatkan
-    const w = Math.round(active.offsetWidth * 0.8)
-    const x = active.offsetLeft + Math.round((active.offsetWidth - w) / 2)
+    // pakai rect asli supaya ikut memperhitungkan border & padding
+    const r = active.getBoundingClientRect()
+    const nr = nav.getBoundingClientRect()
+    const top = r.top - nr.top + nav.scrollTop
+    const h = r.height - 1 // kurangi garis pemisah di bawah
+    const w = r.width * 0.8
+    const x = r.left - nr.left + (r.width - w) / 2
     dot.style.width = `${w}px`
-    dot.style.height = `${active.offsetHeight}px`
-    dot.style.transform = `translate(${x}px, ${active.offsetTop}px)`
+    dot.style.height = `${h}px`
+    dot.style.transform = `translate(${x}px, ${top + 0.5}px)`
   } else {
+    // kembalikan ke aturan CSS (penting setelah resize dari HP ke desktop)
     dot.style.height = ''
-    dot.style.width = `${active.offsetWidth + pad * 2}px`
-    dot.style.transform = `translateX(${active.offsetLeft - pad}px)`
+    dot.style.width = `${Math.round(active.offsetWidth * k) + pad * 2}px`
+    dot.style.transform = `translateX(${Math.round((active.offsetLeft - pad) * k)}px)`
   }
 }
 
@@ -1076,7 +1089,12 @@ const route = () => {
 
 /* ---------- Header & nav ---------- */
 const header = document.querySelector('.site-header')
-const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20)
+const onScroll = () => {
+  const scrolled = window.scrollY > 20
+  const changed = header.classList.contains('scrolled') !== scrolled
+  header.classList.toggle('scrolled', scrolled)
+  if (changed) moveNavIndicator()
+}
 
 document.querySelector('.menu-toggle').addEventListener('click', (e) => {
   const nav = document.querySelector('#nav')
