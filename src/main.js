@@ -558,7 +558,8 @@ const wallCap = () => {
 
 /* Di layar kecil dinding tidak digeser otomatis (loopingnya akan bolong),
    tapi jadi grid statis yang ikut scroll — lebih wajar di HP. */
-const wallIsStatic = () => window.matchMedia('(max-width: 640px)').matches
+// Dinding media berjalan di semua layar (desktop & HP).
+const wallIsStatic = () => false
 
 const wallColCount = (n) => {
   const cap = wallCap()

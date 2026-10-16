@@ -2648,46 +2648,36 @@ body.edit-mode .about-photo.is-empty {
   }
 
   /* ---------- Home: media wall ---------- */
-  /* di HP dinding jadi grid statis yang ikut scroll, bukan loop otomatis */
-  .wall {
-    height: auto;
-    padding-top: calc(var(--header-h) + 6px);
-    padding-bottom: 40px;
-  }
-
+  /* Di HP dinding tetap berjalan (loop otomatis), hanya dikecilkan */
   .wall-cols {
-    position: relative;
-    inset: auto;
-    padding: 0 var(--pad);
     gap: 6px;
-    overflow: visible;
-  }
-
-  .wall-col {
-    overflow: visible;
   }
 
   .wall-track {
-    animation: none;
     gap: 6px;
   }
 
-  .wall-vignette {
-    display: none;
-  }
-
+  /* teks utama di HP dibesarkan 2px */
   .wall-caption {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    padding: 34px var(--pad) 0;
-    gap: 14px;
+    gap: 16px;
   }
 
   .wall-title {
-    font-size: clamp(2.1rem, 11.5vw, 3.4rem);
-    line-height: 0.94;
+    font-size: clamp(2.53rem, 9vw, 8.5rem);
+    line-height: 0.92;
+  }
+
+  .wall-caption .label {
+    font-size: 13.5px;
+  }
+
+/* gradient bawah lebih tinggi di HP supaya tidak ada garis sambungan */
+  .wall-vignette {
+    background:
+      linear-gradient(90deg, var(--bg) 0%, transparent 16%),
+      linear-gradient(270deg, var(--bg) 0%, transparent 16%),
+      linear-gradient(180deg, var(--bg) 0%, transparent 24%),
+      linear-gradient(0deg, var(--bg) 0%, transparent 68%);
   }
 
   .wall-tile-label {
