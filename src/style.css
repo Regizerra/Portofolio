@@ -1382,7 +1382,7 @@ body.edit-mode .work-grid:hover .work-card {
   align-items: center;
   gap: 36px;
   width: max-content;
-  animation: marquee 32s linear infinite;
+  animation: marquee var(--ticker-speed, 32s) linear infinite;
   will-change: transform;
 }
 

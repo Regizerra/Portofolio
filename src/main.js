@@ -838,19 +838,17 @@ const renderAbout = () => {
 }
 
 /* ---------- Ticker & footer ---------- */
-// Isi ticker dibuat otomatis dari kategori + judul karya, jadi tidak
-// perlu diisi manual lagi. Kalau belum ada karya, pakai kategori saja.
+// Isi ticker dibuat otomatis dari kategori — sama seperti tab filter di
+// halaman Work, jadi yang lewat di bawah adalah nama-nama kategorinya.
 const tickerItems = () => {
   const seen = new Set()
   const out = []
-  const push = (t) => {
-    const s = String(t || '').trim()
+  content.categories.forEach((c) => {
+    const s = String(c.label || '').trim()
     if (!s || seen.has(s.toLowerCase())) return
     seen.add(s.toLowerCase())
     out.push(s)
-  }
-  content.categories.forEach((c) => push(c.label))
-  content.works.forEach((w) => push(w.title))
+  })
   return out.length ? out : ['Portfolio']
 }
 
@@ -859,6 +857,11 @@ const renderTicker = () => {
   const items = tickerItems()
   const html = items.map((m) => `<span>${esc(m)}</span>`).join('')
   track.innerHTML = html + html
+
+  // durasi ikut menyesuaikan panjang teks supaya kecepatannya konsisten
+  const chars = items.join('').length
+  const seconds = Math.max(28, Math.round(chars * 1.15))
+  track.style.setProperty('--ticker-speed', `${seconds}s`)
 }
 
 const renderFooter = () => {
