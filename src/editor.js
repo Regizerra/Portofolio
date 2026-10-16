@@ -269,6 +269,143 @@ export function initEditor(app) {
     if (tool === 'exit') exitEdit()
   })
 
+  /* ---------- Crop karya (seperti Atur crop di Instagram) ---------- */
+  const cropModal = document.createElement('div')
+  cropModal.className = 'crop-modal'
+  cropModal.hidden = true
+  cropModal.innerHTML = `
+    <div class="crop-box" role="dialog" aria-modal="true" aria-label="Crop image">
+      <p class="label dim">Crop</p>
+      <p class="crop-hint">Geser gambar untuk pindah posisi, geser zoom untuk membesar.</p>
+      <div class="crop-frame">
+        <img class="crop-img" alt="">
+        <div class="crop-grid" aria-hidden="true"></div>
+      </div>
+      <label class="crop-zoom">Zoom
+        <input type="range" class="crop-zoom-range" min="1" max="3" step="0.01">
+      </label>
+      <div class="crop-actions">
+        <button class="btn-mini" data-crop="reset" type="button">Reset</button>
+        <button class="btn-mini" data-crop="cancel" type="button">Batal</button>
+        <button class="btn-mini primary" data-crop="save" type="button">Simpan</button>
+      </div>
+    </div>`
+  document.body.appendChild(cropModal)
+
+  const cropImg = cropModal.querySelector('.crop-img')
+  const cropFrame = cropModal.querySelector('.crop-frame')
+  const cropRange = cropModal.querySelector('.crop-zoom-range')
+
+  let cropIndex = -1
+  let cropState = { zoom: 1, posX: 50, posY: 50 }
+
+  const paintCrop = () => {
+    cropImg.style.objectPosition = `${cropState.posX}% ${cropState.posY}%`
+    cropImg.style.transform = `scale(${cropState.zoom})`
+    cropRange.value = String(cropState.zoom)
+  }
+
+  const openCrop = (i) => {
+    const work = app.content.works[i]
+    if (!work || !work.img) return
+    cropIndex = i
+    cropState = {
+      zoom: Number(work.zoom) || 1,
+      posX: work.posX == null ? 50 : Number(work.posX),
+      posY: work.posY == null ? 50 : Number(work.posY),
+    }
+    cropImg.src = work.img
+    cropRange.min = '1'
+    cropRange.max = '3'
+    cropModal.hidden = false
+    paintCrop()
+  }
+
+  const closeCrop = () => {
+    cropModal.hidden = true
+    cropIndex = -1
+  }
+
+  cropRange.addEventListener('input', () => {
+    cropState.zoom = Number(cropRange.value)
+    paintCrop()
+  })
+
+  // geser gambar untuk memindah posisi crop
+  let cropDrag = null
+  cropFrame.addEventListener('pointerdown', (e) => {
+    e.preventDefault()
+    cropFrame.setPointerCapture?.(e.pointerId)
+    const r = cropFrame.getBoundingClientRect()
+    // hitung berapa px gambar meluber di tiap sisi
+    const nat = cropImg.naturalWidth || 1
+    const natH = cropImg.naturalHeight || 1
+    const frameRatio = r.width / r.height
+    const imgRatio = nat / natH
+    let coverW
+    let coverH
+    if (imgRatio > frameRatio) {
+      coverH = r.height * cropState.zoom
+      coverW = coverH * imgRatio
+    } else {
+      coverW = r.width * cropState.zoom
+      coverH = coverW / imgRatio
+    }
+    cropDrag = {
+      x: e.clientX,
+      y: e.clientY,
+      posX: cropState.posX,
+      posY: cropState.posY,
+      overX: Math.max(0.0001, coverW - r.width),
+      overY: Math.max(0.0001, coverH - r.height),
+    }
+  })
+
+  cropFrame.addEventListener('pointermove', (e) => {
+    if (!cropDrag) return
+    const dx = e.clientX - cropDrag.x
+    const dy = e.clientY - cropDrag.y
+    cropState.posX = Math.max(0, Math.min(100, cropDrag.posX - (dx / cropDrag.overX) * 100))
+    cropState.posY = Math.max(0, Math.min(100, cropDrag.posY - (dy / cropDrag.overY) * 100))
+    paintCrop()
+  })
+
+  const endCropDrag = () => {
+    cropDrag = null
+  }
+  cropFrame.addEventListener('pointerup', endCropDrag)
+  cropFrame.addEventListener('pointercancel', endCropDrag)
+
+  cropModal.addEventListener('click', (e) => {
+    if (e.target === cropModal) {
+      closeCrop()
+      return
+    }
+    const btn = e.target.closest('[data-crop]')
+    if (!btn) return
+    const action = btn.dataset.crop
+
+    if (action === 'reset') {
+      cropState = { zoom: 1, posX: 50, posY: 50 }
+      paintCrop()
+      return
+    }
+    if (action === 'cancel') {
+      closeCrop()
+      return
+    }
+    if (action === 'save' && cropIndex >= 0) {
+      const work = app.content.works[cropIndex]
+      work.zoom = Math.round(cropState.zoom * 100) / 100
+      work.posX = Math.round(cropState.posX * 10) / 10
+      work.posY = Math.round(cropState.posY * 10) / 10
+      app.save()
+      app.renderAll()
+      closeCrop()
+      notify('Crop disimpan.')
+    }
+  })
+
   /* ---------- Sticker mode ----------
      Aktif: Shift + klik tombol CV (tombol yang sama dengan admin).
      Mode ini BUKAN Custom Mode:visitor tidak pernah melihat kontrolnya. */
@@ -621,6 +758,14 @@ export function initEditor(app) {
       return
     }
 
+    if (el.matches('[data-edit-input]')) {
+      app.writePath(el.dataset.editInput, el.value)
+      app.save()
+      // sinkronkan kemunculan teks yang sama (mis. di lightbox & wall)
+      app.applyContentToDOM()
+      return
+    }
+
     if (el.matches('[data-action="social-url"]')) {
       const i = Number(el.dataset.index)
       app.content.contact.socials[i].url = el.value
@@ -732,6 +877,7 @@ export function initEditor(app) {
         if (action === 'add') addItem(list)
         if (action === 'del') delItem(list, Number(index))
         if (action === 'pick-video') pickVideo(Number(index))
+        if (action === 'crop') openCrop(Number(index))
       } catch (err) {
         notify(`Could not apply that change: ${err.message}`)
         console.error(err)
@@ -776,6 +922,43 @@ export function initEditor(app) {
 
   const MAX_DIM = 1400
 
+  const kb = (len) => Math.round(len / 1024) + ' KB'
+
+// Menggambar sumber gambar ke canvas, mengecilkan, lalu meng-encode.
+  // image/webp dipakai lebih dulu, ada cadangan PNG/JPEG.
+  const drawToDataUrl = (source, w0, h0, file) => {
+    const scale = w0 ? Math.min(1, MAX_DIM / Math.max(w0, h0)) : 1
+    const w = Math.max(1, Math.round(w0 * scale))
+    const h = Math.max(1, Math.round(h0 * scale))
+    const canvas = document.createElement('canvas')
+    canvas.width = w
+    canvas.height = h
+    const ctx = canvas.getContext('2d')
+
+    // JPEG tidak bisa menyimpan transparansi -> latar belakang putih
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, w, h)
+    ctx.drawImage(source, 0, 0, w, h)
+
+    // PNG hanya dipakai kalau memang butuh alpha / artwork datar.
+    const needsAlpha = file.type === 'image/png' || file.type === 'image/gif'
+    const tryTypes = needsAlpha
+      ? ['image/webp', 'image/png', 'image/jpeg']
+      : ['image/webp', 'image/jpeg', 'image/png']
+
+    for (const type of tryTypes) {
+      try {
+        const encoded = canvas.toDataURL(type, 0.85)
+        if (encoded && encoded.startsWith('data:image/') && encoded.length > 64) {
+          return encoded
+        }
+      } catch {
+        /* format ini tidak didukung browser -> coba berikutnya */
+      }
+    }
+    return ''
+  }
+
   const compressImage = (file) =>
     new Promise((resolve, reject) => {
       const reader = new FileReader()
@@ -783,48 +966,39 @@ export function initEditor(app) {
         const img = new Image()
         img.onload = () => {
           try {
-            const w0 = img.naturalWidth || img.width
-            const h0 = img.naturalHeight || img.height
-            const scale = w0 ? Math.min(1, MAX_DIM / Math.max(w0, h0)) : 1
-            const w = Math.max(1, Math.round(w0 * scale))
-            const h = Math.max(1, Math.round(h0 * scale))
-            const canvas = document.createElement('canvas')
-            canvas.width = w
-            canvas.height = h
-            const ctx = canvas.getContext('2d')
-
-            // JPEG tidak bisa menyimpan transparansi -> latar belakang putih
-            ctx.fillStyle = '#ffffff'
-            ctx.fillRect(0, 0, w, h)
-            ctx.drawImage(img, 0, 0, w, h)
-
-            // Foto disimpan sebagai JPEG (jauh lebih kecil daripada PNG).
-            // PNG hanya dipakai kalau memang butuh alpha / artwork datar.
-            const needsAlpha = file.type === 'image/png' || file.type === 'image/gif'
-            const tryTypes = needsAlpha ? ['image/webp', 'image/png'] : ['image/webp', 'image/jpeg']
-
-            let out = ''
-            for (const type of tryTypes) {
-              const encoded = canvas.toDataURL(type, 0.85)
-              if (encoded && encoded.length > 64) {
-                out = encoded
-                break
-              }
-            }
-            if (!out) reject(new Error('empty'))
-            else resolve(out)
+            const out = drawToDataUrl(
+              img,
+              img.naturalWidth || img.width,
+              img.naturalHeight || img.height,
+              file,
+            )
+            // cadangan terakhir: pakai file asli apa adanya
+            if (out) resolve(out)
+            else if (reader.result?.startsWith('data:image/')) resolve(reader.result)
+            else reject(new Error('encode failed'))
           } catch (err) {
             reject(err)
           }
         }
-        img.onerror = () => reject(new Error('image load'))
+        img.onerror = async () => {
+          // <img> gagal? coba decoder alternatif (createImageBitmap)
+          try {
+            const bmp = await createImageBitmap(file)
+            const out = drawToDataUrl(bmp, bmp.width, bmp.height, file)
+            resolve(out || reader.result)
+          } catch {
+            reject(
+              new Error(
+                `${file.name} (${file.type || 'unknown type'}, ${kb(file.size)}) cannot be opened by this browser`,
+              ),
+            )
+          }
+        }
         img.src = reader.result
       }
-      reader.onerror = () => reject(new Error('read'))
+      reader.onerror = () => reject(new Error('file could not be read'))
       reader.readAsDataURL(file)
     })
-
-  const kb = (len) => Math.round(len / 1024) + ' KB'
 
   let fullWarned = false
   window.addEventListener('storage-full', () => {
@@ -873,8 +1047,8 @@ export function initEditor(app) {
       const saved = app.save()
       app.renderAll()
       notify(saved ? `Image updated — ${kb(dataUrl.length)}` : 'Image updated, but storage is full! Export your content.json to keep it.')
-    } catch {
-      notify('Failed to load the image.')
+    } catch (err) {
+      notify(`Failed to load the image — ${err?.message || 'unknown error'}`)
     }
     pendingPath = null
   })

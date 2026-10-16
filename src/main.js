@@ -176,6 +176,13 @@ const applyContentToDOM = () => {
     const value = readPath(path)
     if (value != null) el.textContent = String(value).replace('{year}', year)
   })
+  document.querySelectorAll('[data-edit-input]').forEach((el) => {
+    const path = el.dataset.editInput
+    if (!path || path.startsWith('__')) return
+    if (el === document.activeElement) return
+    const value = readPath(path)
+    if (value != null && el.value !== String(value)) el.value = String(value)
+  })
 }
 
 /* ---------- Language ---------- */
@@ -376,7 +383,15 @@ const lightbox = (() => {
   }
 
   box.addEventListener('click', (e) => {
-    if (e.target === box || e.target.classList.contains('lightbox-scrim')) close()
+    // tombol close selalu menutup
+    if (e.target.closest('.lightbox-close')) {
+      close()
+      return
+    }
+    // menyentuh gambar / judul / keterangan tidak menutup
+    if (e.target.closest('.lightbox-media, .lightbox-title, .lightbox-meta')) return
+    // sentuhan di area putih mana pun -> tutup
+    close()
   })
   closeBtn.addEventListener('click', close)
   document.addEventListener('keydown', (e) => {
@@ -420,13 +435,23 @@ card.innerHTML = `
       }
       ${hasVideo ? '<span class="work-play" aria-hidden="true"></span>' : ''}
       <span class="work-thumb-index">${pad(num)}</span>
-      <div class="work-card-meta">
-        <h3 class="work-card-title" data-edit="${ed(`works.${i}.title`)}">${esc(work.title)}</h3>
-        <span class="label work-card-sub">
-          <span data-edit="${ed(`works.${i}.year`)}">${esc(work.year)}</span> ·
-          <a class="work-card-cat" href="#/work/${esc(work.cat)}">${esc(catLabel(work.cat))}</a>
-        </span>
-      </div>
+    </div>
+    <div class="work-card-meta">
+      <h3 class="work-card-title" data-edit="${ed(`works.${i}.title`)}">${esc(work.title)}</h3>
+      <span class="label work-card-sub">
+        <span data-edit="${ed(`works.${i}.year`)}">${esc(work.year)}</span> ·
+        <a class="work-card-cat" href="#/work/${esc(work.cat)}">${esc(catLabel(work.cat))}</a>
+      </span>
+    </div>
+    <div class="work-edit-fields edit-only">
+      <label class="edit-field">
+        <span>Title</span>
+        <input class="edit-input" type="text" data-edit-input="${ed(`works.${i}.title`)}" value="${esc(work.title)}">
+      </label>
+      <label class="edit-field">
+        <span>Caption</span>
+        <input class="edit-input" type="text" data-edit-input="${ed(`works.${i}.year`)}" value="${esc(work.year)}">
+      </label>
     </div>
     <div class="edit-only work-edit">
       <select class="edit-select" data-action="work-cat" data-index="${i}">${options}</select>
@@ -436,12 +461,25 @@ card.innerHTML = `
       </label>
       <button class="edit-ctrl edit-video-btn" type="button"
         data-action="pick-video" data-index="${i}">${work.video ? 'Change video' : '+ Video'}</button>
+      ${
+        hasImg
+          ? `<button class="edit-ctrl" type="button" data-action="crop" data-index="${i}">Crop</button>`
+          : ''
+      }
       <button class="edit-ctrl" type="button" data-action="del" data-list="works" data-index="${i}">Delete</button>
     </div>
   `
 
   if (hasImg) {
-    attachImgFallback(card.querySelector('.work-img'), () => {
+    // ---- crop kustom (sepertiAtur crop di Instagram) ----
+    const zoom = Number(work.zoom) || 1
+    const px = work.posX == null ? 50 : Number(work.posX)
+    const py = work.posY == null ? 50 : Number(work.posY)
+    const imgEl = card.querySelector('.work-img')
+    imgEl.style.objectPosition = `${px}% ${py}%`
+    imgEl.style.transform = `scale(${zoom})`
+
+    attachImgFallback(imgEl, () => {
       if (hasVideo) return
       const th = card.querySelector('.work-thumb')
       th.classList.remove('has-img')

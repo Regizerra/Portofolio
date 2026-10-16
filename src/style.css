@@ -156,6 +156,12 @@ img {
   visibility: hidden;
 }
 
+/* berhentikan animasi loader setelah intro selesai supaya tidak
+   tetap memakai CPU */
+.intro-overlay.hide .loader {
+  animation: none;
+}
+
 /* Loader (intro) � from Uiverse.io by Shoh2008 */
 .loader {
   width: 45px;
@@ -215,9 +221,7 @@ img {
   width: 100%;
   height: 52px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(14px) saturate(1.4);
-  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
   border: 1px solid var(--line);
   box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.45);
   opacity: 0;
@@ -1043,28 +1047,28 @@ img {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  opacity: 1;
   transition: opacity 0.4s var(--ease);
 }
 
 /* Semua efek hover hanya untuk perangkat dengan tetikus sungguhan.
-   Di HP tidak ada hover, jadi teks tidak boleh ikut hilang / redup. */
+   Di HP tidak ada hover. Kartus tidak pernah diredupkan — opacity
+   selalu 100% supaya gambar dan teksnya tetap jelas. */
 @media (hover: hover) and (pointer: fine) {
-  /* redupkan, tapi jangan sampai teks hilang total */
-  .work-grid:hover .work-card {
-    opacity: 0.4;
-  }
-  .work-grid:hover .work-card:hover {
+  .work-grid:hover .work-card,
+  .work-grid:hover .work-card:hover,
+  .work-card:hover {
     opacity: 1;
   }
 
-  /* kursor di atas kartu -> teks tengah disembunyikan, blur dilepas */
-  .work-card:hover .work-card-meta {
-    opacity: 0;
+  /* kursor di atas kartu -> gambar membesar, teks tetap tampil */
+  .work-card:hover .work-thumb {
+    transform: scale(1.03);
   }
 
   .work-card:hover .work-thumb.has-img .work-card-meta,
   .work-card:hover .work-thumb.has-video .work-card-meta {
-    background: rgba(217, 217, 217, 0);
+    background: transparent;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
@@ -1197,17 +1201,17 @@ body.edit-mode .work-grid:hover .work-card {
 
 /* centred overlay inside the glass card */
 .work-card-meta {
-  position: absolute;
-  inset: 0;
+  position: static;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px;
+  justify-content: flex-start;
+  gap: 6px;
+  width: 100%;
   text-align: center;
-  pointer-events: none;
+  padding: 14px 4px 0;
+  opacity: 1;
 }
 
 .work-card-title {
@@ -1224,18 +1228,13 @@ body.edit-mode .work-grid:hover .work-card {
   white-space: normal;
 }
 
-/* frosted plate so the text stays readable on top of artwork */
+/* Teks judul kini di bawah kartu — tanpa frosted plate lagi */
 .work-thumb.has-img .work-card-meta,
 .work-thumb.has-video .work-card-meta {
-  background: rgba(217, 217, 217, 0.42);
-  -webkit-backdrop-filter: blur(6px);
-  backdrop-filter: blur(6px);
-  border-radius: 17px;
-  transition:
-    opacity 0.35s var(--ease),
-    background-color 0.5s var(--ease),
-    backdrop-filter 0.35s var(--ease),
-    -webkit-backdrop-filter 0.35s var(--ease);
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: 0;
 }
 
 .work-card-cat {
@@ -1593,6 +1592,46 @@ body.edit-mode .edit-only {
 
 body.edit-mode .work-edit {
   display: flex;
+}
+
+/* Kolom teks di bawah kartu (khusus Custom Mode) */
+.work-edit-fields {
+  display: none;
+  gap: 8px;
+  width: 100%;
+}
+
+body.edit-mode .work-edit-fields {
+  display: grid;
+}
+
+.edit-field {
+  display: grid;
+  gap: 4px;
+}
+
+.edit-field > span {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.edit-input {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: var(--ink);
 }
 
 /* Trigger button � disamarkan sebagai "CV" */
@@ -2879,6 +2918,104 @@ body.edit-mode .about-photo.is-empty {
 .wall-title {
     font-size: 2rem;
   }
+}
+
+/* ============================================================
+   CROP — pengaturan potong gambar karya (seperti Atur crop IG)
+   ============================================================ */
+
+.crop-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+}
+
+.crop-box {
+  width: min(340px, 100%);
+  padding: 16px 16px 14px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.crop-hint {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--ink-soft);
+}
+
+/* bingkai 3:4 — sama dengan kartu karya */
+.crop-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #e9e9e9;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.crop-frame:active {
+  cursor: grabbing;
+}
+
+.crop-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center;
+  pointer-events: none;
+}
+
+/* garis bantu_rule of thirds ala IG */
+.crop-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  background:
+    linear-gradient(to right, transparent 33.33%, rgba(255, 255, 255, 0.55) 33.33%, rgba(255, 255, 255, 0.55) 33.6%, transparent 33.6%, transparent 66.4%, rgba(255, 255, 255, 0.55) 66.4%, rgba(255, 255, 255, 0.55) 66.66%, transparent 66.66%),
+    linear-gradient(to bottom, transparent 33.33%, rgba(255, 255, 255, 0.55) 33.33%, rgba(255, 255, 255, 0.55) 33.6%, transparent 33.6%, transparent 66.4%, rgba(255, 255, 255, 0.55) 66.4%, rgba(255, 255, 255, 0.55) 66.66%, transparent 66.66%);
+}
+
+.crop-frame:hover .crop-grid {
+  opacity: 1;
+}
+
+.crop-zoom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+}
+
+.crop-zoom input[type="range"] {
+  flex: 1;
+  accent-color: var(--ink);
+}
+
+.crop-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
 }
 
 /* ============================================================
