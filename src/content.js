@@ -1,66 +1,112 @@
-﻿// ============================================================
-//  ALL WEBSITE CONTENT IS SET HERE.
-//  You normally don't need to edit this file by hand —
-//  use "Custom Mode" on the site (type code 2710) and edit
-//  visually. When you're done click "Export" to download
-//  content.json, drop that file into the  public/
-//  folder so every visitor (e.g. on Vercel) sees your changes.
-// ============================================================
+/* ============================================================
+   CONTENT — semua teks & data portfolio.
+
+   File ini DIHASILKAN otomatis oleh:
+     node scripts/build-content-js.mjs
+
+   Sumbernya: public/content.json
+   Kalau kamu mengubah isi website lewat Custom Mode, jangan
+   mengedit file ini secara manual — cukup edit content.json
+   (atau pakai menu Reset + Import) lalu jalankan ulang script di atas.
+   ============================================================ */
 
 export const defaultContent = {
-  // Empty = the default white theme.
-  // If you change colors in Custom Mode the values are stored here
-  // (bg = background, ink = text, line = borders).
   theme: {},
-
   brand: {
-    name: 'Your Name',
-    mark: '\u00ae',
+    name: 'Reginald M.R.G.',
+    mark: '®',
     tunnel: 'Creative Studio',
   },
-
-  // Caption above the media wall (home page)
   wall: {
-    eyebrow: 'Selected Work — Jakarta, Indonesia',
+    eyebrow: 'Selected Work — Tuban, Indonesia',
     line1: 'Design',
     line2: 'Illustrate',
-    line3: 'Map & Edit',
+    line3: 'Animate & Edit',
     link: 'View All Work',
   },
-
   marquee: [
     'Graphic Design',
     'Illustration',
-    'GIS & Mapping',
     'Video Editing',
-    'Photo Retouching',
-    'Branding',
+    'Animation\n',
+    'Photo Editing',
   ],
-
   workSection: {
     label: 'Selected Work',
     title: 'All Work',
     note: 'A mix of five disciplines. Pick a category to see the full set.',
   },
-
   experienceSection: {
     label: 'Experience',
     title: 'Track Record',
-    note: 'Roles, collaborations, and the path that got here. Entries appear once you give them a title.',
+    note: 'Roles, organisations, and competitions across visual design and creative media.',
   },
-
-  // Isi experience lewat Custom Mode: klik "+ Experience", lalu ketik judulnya.
-  // Selama title kosong, entri itu tidak akan tampil untuk pengunjung.
-  // period: contoh "2023 — Present" atau "Jan 2024 · Des 2024"
-  experience: [],
-
-  // Stiker: gambar yang "dipasak" di halaman tertentu.
-  // page : 'home' | 'work' | 'experience' | 'about'
-  // x, y : posisi persen (0-100) relatif terhadap halaman
-  // size : ukuran px (dipakai di semua perangkat)
-  // layer: 'front' (di atas konten) | 'back' (di belakang konten)
+  experience: [
+    {
+      title: 'Kepala Divisi Media dan Branding',
+      org: 'Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS',
+      period: 'Feb 2025 – Dec 2025',
+      desc: 'Membuat logo kabinet dengan Adobe Illustrator & Photoshop. Merancang desain jaket himpunan. Merekam dan menyunting company profile dengan CapCut & After Effects. Mengoordinasikan program kerja staf divisi.',
+      img: null,
+    },
+    {
+      title: 'Staff Divisi Media dan Branding',
+      org: 'Himpunan Mahasiswa Ilmu Ilmu Lingkungan (HIMAPSILI) UNS',
+      period: 'Feb 2024 – Nov 2024',
+      desc: 'Membuat logo kabinet, desain jaket, dan company profile. Mendokumentasikan kegiatan dan mengoordinasikan program kerja divisi.',
+      img: null,
+    },
+    {
+      title: 'Chief Product Officer',
+      org: 'Tescopave — Universitas Sebelas Maret',
+      period: 'Jun 2025 – Mar 2026',
+      desc: 'Membangun website penyajian informasi Tescopave. Mengelola akun Instagram dan membuat konten publikasi.',
+      img: null,
+    },
+    {
+      title: 'Koordinator Divisi Media',
+      org: 'ENVICUP (Environmental Cup) 2.0 — UNS',
+      period: 'May 2025 – Sep 2025',
+      desc: 'Membuat logo ENVICUP dengan Adobe Illustrator. Merekam dan menyunting video teaser & trailer dengan Premiere Pro & CapCut. Menyusun publikasi Instagram dan mengoordinasikan jobdesk.',
+      img: null,
+    },
+    {
+      title: 'Koordinator Divisi Media',
+      org: 'OXYGENE — UNS',
+      period: 'May 2024 – Sep 2024',
+      desc: 'Membuat logo OXYGENE dengan Adobe Illustrator dan mascot dengan Medibang. Menyunting video teaser, trailer, dan after movie dengan CapCut.',
+      img: null,
+    },
+    {
+      title: 'Staff Divisi Aksi',
+      org: 'SDG\'s Center UNS',
+      period: 'Mar 2024 – Dec 2024',
+      desc: 'Menyusun konsep kegiatan aksi, menjadi ketua pelaksana Project SABI 17(I), serta mengelola programbiggl social dan lingkungan.',
+      img: null,
+    },
+    {
+      title: 'Staff Implikasi Sosial dan Lingkungan',
+      org: 'Badan Eksekutif Mahasiswa (BEM) FMIPA UNS',
+      period: 'May 2024 – Nov 2024',
+      desc: 'Membuat konsep Video MIPA PEDIA, menyunting dengan CapCut, dan mendokumentasikan acara sosial.',
+      img: null,
+    },
+    {
+      title: 'Staff Divisi Media',
+      org: 'Diesnatalis FMIPA X DUTA FMIPA UNS',
+      period: 'Aug 2024 – Sep 2024',
+      desc: 'Membuat poster publikasi, mendokumentasikan acara, dan menyusun publikasi Instagram.',
+      img: null,
+    },
+    {
+      title: 'Koordinator Divisi Media',
+      org: 'Project SABI (Small Act Big Impact) 17(I) — SDG’s Center UNS',
+      period: 'Apr 2024 – May 2024',
+      desc: 'Menyusun konsep dan rundown proyek, mengoordinasikan anggota, serta membuka donasi program.',
+      img: null,
+    },
+  ],
   stickers: [],
-
   categories: [
     {
       id: 'graphic-design',
@@ -78,9 +124,9 @@ export const defaultContent = {
       desc: 'Video editing, motion graphics, color grading, and sound design.',
     },
     {
-      id: 'gis',
-      label: 'GIS',
-      desc: 'Spatial data analysis, thematic maps, cartography, and remote sensing.',
+      id: 'animation',
+      label: 'Animation\n',
+      desc: 'Logo animation, product animation, and motion graphics.',
     },
     {
       id: 'photo-editing',
@@ -88,225 +134,497 @@ export const defaultContent = {
       desc: 'Retouching, manipulation, and color grading for product and editorial photos.',
     },
   ],
-
-  // img: put the file in public/work/ then set  "/work/filename.jpg"
-  //       (or just click the thumbnail and pick the file in Custom Mode)
-  // video: video/motion file. Put it in public/work/ and use "/work/filename.mp4"
-  //        — videos are far too large to be embedded, so they stay as file paths.
-  // img: null  -> the work is not published yet, so visitors won't see it
-  //             (it still shows in Custom Mode so you can add the image)
-  // featured: true -> shows on the home media wall
   works: [
-    { title: 'Local Coffee Brand Identity', cat: 'graphic-design', year: 2025, img: null, video: null, featured: true },
-    { title: 'Skincare Product Packaging', cat: 'graphic-design', year: 2025, img: null, video: null, featured: true },
-    { title: 'Music Festival Poster', cat: 'graphic-design', year: 2024, img: null, video: null, featured: true },
-    { title: 'Editorial Illustration Series', cat: 'illustration', year: 2025, img: null, video: null, featured: true },
-    { title: 'Mascot Character Illustration', cat: 'illustration', year: 2024, img: null, video: null, featured: true },
-    { title: "Children's Book Cover", cat: 'illustration', year: 2024, img: null, video: null, featured: true },
-    { title: 'Corporate Profile Video', cat: 'video-editing', year: 2025, img: null, video: null, featured: true },
-    { title: 'Campaign Reels Content', cat: 'video-editing', year: 2024, img: null, video: null, featured: true },
-    { title: 'Annual Event Aftermovie', cat: 'video-editing', year: 2024, img: null, video: null, featured: true },
-    { title: 'Land Use Thematic Map', cat: 'gis', year: 2025, img: null, video: null, featured: true },
-    { title: 'Flood Data Visualization', cat: 'gis', year: 2024, img: null, video: null, featured: true },
-    { title: 'Interactive Tourism Map', cat: 'gis', year: 2024, img: null, video: null, featured: true },
-    { title: 'Product Photo Retouching', cat: 'photo-editing', year: 2025, img: null, video: null, featured: true },
-    { title: 'Editorial Photo Color Grading', cat: 'photo-editing', year: 2024, img: null, video: null, featured: true },
-    { title: 'Vintage Photo Restoration', cat: 'photo-editing', year: 2023, img: null, video: null, featured: true },
+    {
+      title: 'Poster Tugas Pencemaran Udara',
+      cat: 'graphic-design',
+      year: 2025,
+      img: '/work/poster-tugas-pencemaran-udara.webp',
+      featured: true,
+      zoom: 1,
+      posX: 50,
+      posY: 50,
+    },
+    {
+      title: 'Poster Tahun Baru Islam 1445H',
+      cat: 'graphic-design',
+      year: '2023',
+      img: '/work/poster-tahun-baru-islam-1445h.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Poster HUT RI Ke-80',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-hut-ri-ke-80.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Desain Baju Envicup',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/desain-baju-envicup.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Cover Buku EcoTraffic GIS',
+      cat: 'graphic-design',
+      year: 2026,
+      img: '/work/cover-buku-ecotraffic-gis.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Logo Kabinet (Putih) Gatra Wirasa HIMAPSILI 2024',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/logo-kabinet-putih-gatra-wirasa-himapsili-2024.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Logo Kabinet (Hitam) Gatra Wirasa HIMAPSILI 2024',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/logo-kabinet-hitam-gatra-wirasa-himapsili-2024.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Jaket Himpunan HImapsili 2024',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/jaket-himpunan-himapsili-2024.webp',
+      video: null,
+      featured: true,
+      zoom: 1,
+      posX: 0,
+      posY: 100,
+    },
+    {
+      title: 'Maskot PKKMB Prodi ilmu lingkungan (Oxygene) 2024',
+      cat: 'illustration',
+      year: '2024',
+      img: '/work/maskot-pkkmb-prodi-ilmu-lingkungan-oxygene-2024.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Maskot PKKMB Prodi ilmu lingkungan (Oxygene) 2024',
+      cat: 'illustration',
+      year: '2024',
+      img: '/work/maskot-pkkmb-prodi-ilmu-lingkungan-oxygene-2024-2.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Maskot PKKMB Prodi ilmu lingkungan (Oxygene) 2025',
+      cat: 'illustration',
+      year: '2025',
+      img: '/work/maskot-pkkmb-prodi-ilmu-lingkungan-oxygene-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'Maskot PKKMB Prodi ilmu lingkungan (Oxygene) 2025',
+      cat: 'illustration',
+      year: '2025',
+      img: '/work/maskot-pkkmb-prodi-ilmu-lingkungan-oxygene-2025-2.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'maskot dino envinight himapsili 2023',
+      cat: 'illustration',
+      year: '2023',
+      img: '/work/maskot-dino-envinight-himapsili-2023.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'lanyard environmental science gen 2023',
+      cat: 'graphic-design',
+      year: '2023',
+      img: '/work/lanyard-environmental-science-gen-2023.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: '[commission] infographic edible film probiotik',
+      cat: 'graphic-design',
+      year: '2026',
+      img: '/work/commission-infographic-edible-film-probiotik.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'feeds instagram tescopave corp',
+      cat: 'graphic-design',
+      year: '2026',
+      img: '/work/feeds-instagram-tescopave-corp.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'feeds instagram tescopave corp',
+      cat: 'graphic-design',
+      year: 2026,
+      img: '/work/feeds-instagram-tescopave-corp-2.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'feeds instagram tescopave corp',
+      cat: 'graphic-design',
+      year: 2026,
+      img: '/work/feeds-instagram-tescopave-corp-3.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker mascot oxygene 2024 x sariroti [collab]',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-mascot-oxygene-2024-x-sariroti-collab.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'poster tescopave corp',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-tescopave-corp.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'logo tescopave corp',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/logo-tescopave-corp.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'feeds envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/feeds-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'feeds envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/feeds-envicup-2-0-2025-2.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'logo envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/logo-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'background zoom envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/background-zoom-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'poster h-3 staff reveal envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-h-3-staff-reveal-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'poster h-2 staff reveal envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-h-2-staff-reveal-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'poster h-1 staff reveal envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-h-1-staff-reveal-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'poster staff reveal envicup 2.0 2025',
+      cat: 'graphic-design',
+      year: '2025',
+      img: '/work/poster-staff-reveal-envicup-2-0-2025.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-2.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-3.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-4.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-5.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-6.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-7.webp',
+      video: null,
+      featured: true,
+    },
+    {
+      title: 'sticker environmental science',
+      cat: 'graphic-design',
+      year: '2024',
+      img: '/work/sticker-environmental-science-8.webp',
+      video: null,
+      featured: true,
+    },
   ],
-
   about: {
     label: 'About',
     photo: null,
-    lead:
-      'A multidisciplinary visual creator working between the illustration canvas, spatial maps, and the video timeline. For me, good design is not just beautiful \u2014 it has to carry a message clearly.',
+    lead: 'I am a Graphic Designer, Illustrator, Animator, Video Editor, and Photo Editor. So, if you need a best design, illustration, animation, video, or touch up your photo...Reach me out!!!',
     cols: [
       {
         label: 'Fields',
         items: [
           'Graphic Design & Branding',
           'Digital Illustration',
-          'GIS & Spatial Mapping',
           'Video Editing & Motion',
           'Photo Editing & Retouching',
         ],
       },
       {
-        label: 'Selected Clients',
-        items: ['Local Coffee Shop', 'Architecture Studio', 'Research Institute', 'Fashion Brand', 'Tech Startup'],
+        label: 'Tools',
+        items: [
+          'Adobe Illustrator',
+          'Adobe Photoshop',
+          'Adobe Premiere Pro',
+          'Adobe After Effects',
+          'DaVinci Resolve',
+          'Canva',
+          'Krita',
+          'Cap Cut',
+          'Medibang',
+        ],
       },
       {
         label: 'Info',
-        items: ['Jakarta, Indonesia', 'Indonesia / English', 'Freelance & Full-time'],
+        items: [
+          'Bahasa Indonesia / English',
+          'Open For Freelance & Full-time',
+        ],
       },
     ],
   },
-
-  servicesSection: { label: 'Services' },
+  servicesSection: {
+    label: 'Services',
+  },
   services: [
     {
-      title: 'Graphic Design & Illustration',
-      desc: 'Logo & brand identity, packaging, posters, digital illustration, typography. Photoshop \u00b7 Illustrator \u00b7 InDesign \u00b7 Procreate.',
-    },
-    {
-      title: 'GIS & Mapping',
-      desc: 'Spatial data analysis, thematic maps, cartography & remote sensing. ArcGIS \u00b7 QGIS \u00b7 Google Earth Engine.',
+      title: 'Graphic Design',
+      desc: 'Feeds · posters, typography. Photoshop · Infographic  · Mockup Making  · etc',
     },
     {
       title: 'Video Editing',
-      desc: 'Editing, motion graphics, color grading & sound design. Premiere Pro \u00b7 After Effects \u00b7 DaVinci Resolve.',
+      desc: 'Editing, motion graphics, color grading & sound design. Premiere Pro · After Effects · DaVinci Resolve. Etc',
     },
     {
       title: 'Photo Editing',
-      desc: 'Retouching, manipulation & color grading for product and editorial photos. Lightroom \u00b7 Photoshop.',
+      desc: 'Retouching, manipulation & color grading for product and editorial photos. Lightroom · Photoshop. Etc',
+    },
+    {
+      title: 'Illustration',
+      desc: 'Anime Style  · Digital Illustration  · Children Book  ·  Book Cover  · Logo  · Icon · Mascot  · Etc',
+    },
+    {
+      title: 'Animation',
+      desc: 'Logo Animation · Product Animation  · After Effect · Etc',
     },
   ],
-
   contact: {
     label: 'Contact',
-    title: "Let's work together.",
-    email: 'email@you.com',
-    note: 'Available for design, illustration, mapping, video & photo editing projects. Replies within 1\u20132 business days.',
+    title: 'Let\'s work together.',
+    email: 'reginaldguzherra@gmail.com',
+    note: 'Available for design, illustration, animation, video & photo editing projects. Replies within 1–2 business days.',
     socials: [
-      { label: 'Instagram', url: 'https://www.instagram.com/' },
-      { label: 'Behance', url: 'https://www.behance.net/' },
+      {
+        label: 'Instagram',
+        url: 'https://www.instagram.com/',
+      },
+      {
+        label: 'WhatsApp',
+        url: 'https://wa.me/6289673108957',
+      },
     ],
   },
-
-  // Letakkan file CV (PDF) di folder public/ lalu isi path-nya di sini.
   cv: {
     label: 'Download CV',
     href: '/cv.pdf',
   },
-
   footer: {
-    left: '\u00a9 {year} Your Name \u2014 Creative Studio',
-    center: 'Jakarta, Indonesia',
-    back: 'Back to top \u2191',
+    left: '© {year} Reginald M.R.G. — Creative Studio',
+    center: 'Tuban, Jawa Timur, Indonesia',
+    back: 'Back to top ↑',
   },
 }
 
-/* ============================================================
-   BAHASA INDONESIA
-   Dipakai saat pengunjung menekan tombol "ID".
-   Kalau ada teks yang belum diterjemahkan, sistem otomatis
-   memakai versi bahasa Inggris.
-   ============================================================ */
-
 export const idContent = {
-  wall: {
-    eyebrow: 'Karya Pilihan — Jakarta, Indonesia',
-    line1: 'Desain',
-    line2: 'Ilustrasi',
-    line3: 'Petakan & Edit',
-    link: 'Lihat Semua Karya',
-  },
-
-  marquee: [
-    'Desain Grafis',
-    'Ilustrasi',
-    'GIS & Pemetaan',
-    'Video Editing',
-    'Photo Retouching',
-    'Branding',
-  ],
-
-  workSection: {
-    label: 'Karya Pilihan',
-    title: 'Semua Karya',
-    note: 'Campuran dari lima bidang. Pilih kategori untuk melihat versi lengkapnya.',
-  },
-
-  experienceSection: {
-    label: 'Pengalaman',
-    title: 'Rekam Jejak',
-    note: 'Peran, kolaborasi, dan perjalanan sampai ke titik ini. Entri baru muncul setelah kamu memberi judulnya.',
-  },
-
-  categories: [
-    {
-      id: 'graphic-design',
-      label: 'Desain Grafis',
-      desc: 'Identitas brand, kemasan, poster, dan materi visual cetak maupun digital.',
-    },
-    {
-      id: 'illustration',
-      label: 'Ilustrasi',
-      desc: 'Ilustrasi digital, karakter, editorial, dan artwork custom.',
-    },
-    {
-      id: 'video-editing',
-      label: 'Video Editing',
-      desc: 'Penyuntingan video, motion graphic, color grading, dan sound design.',
-    },
-    {
-      id: 'gis',
-      label: 'GIS',
-      desc: 'Pengolahan data spasial, peta tematik, kartografi, dan remote sensing.',
-    },
-    {
-      id: 'photo-editing',
-      label: 'Photo Editing',
-      desc: 'Retouching, manipulasi, dan color grading foto produk maupun editorial.',
-    },
-  ],
-
-  about: {
-    label: 'Tentang',
-    lead:
-      'Kreator visual multidisiplin yang bergerak antara kanvas ilustrasi, peta spasial, dan timeline video. Bagi saya, desain yang baik bukan sekadar indah \u2014 ia harus menyampaikan pesan dengan jelas.',
-    cols: [
-      {
-        label: 'Bidang',
-        items: [
-          'Desain Grafis & Branding',
-          'Ilustrasi Digital',
-          'GIS & Pemetaan Spasial',
-          'Video Editing & Motion',
-          'Photo Editing & Retouching',
-        ],
-      },
-      {
-        label: 'Klien Terpilih',
-        items: ['Kedai Kopi Lokal', 'Studio Arsitektur', 'Lembaga Riset', 'Brand Fashion', 'Startup Teknologi'],
-      },
-      {
-        label: 'Info',
-        items: ['Jakarta, Indonesia', 'Indonesia / English', 'Freelance & Full-time'],
-      },
-    ],
-  },
-
-  servicesSection: { label: 'Layanan' },
-  services: [
-    {
-      title: 'Desain Grafis & Ilustrasi',
-      desc: 'Logo & identitas brand, kemasan, poster, ilustrasi digital, tipografi. Photoshop \u00b7 Illustrator \u00b7 InDesign \u00b7 Procreate.',
-    },
-    {
-      title: 'GIS & Pemetaan',
-      desc: 'Pengolahan data spasial, peta tematik, kartografi & remote sensing. ArcGIS \u00b7 QGIS \u00b7 Google Earth Engine.',
-    },
-    {
-      title: 'Video Editing',
-      desc: 'Penyuntingan, motion graphic, color grading & sound design. Premiere Pro \u00b7 After Effects \u00b7 DaVinci Resolve.',
-    },
-    {
-      title: 'Photo Editing',
-      desc: 'Retouching, manipulasi & color grading foto produk maupun editorial. Lightroom \u00b7 Photoshop.',
-    },
-  ],
-
-  contact: {
-    label: 'Kontak',
-    title: 'Mari bekerja sama.',
-    note: 'Tersedia untuk proyek desain, ilustrasi, pemetaan, video & photo editing. Balasan dalam 1\u20132 hari kerja.',
-  },
-
-  cv: {
-    label: 'Unduh CV',
-  },
-
-  footer: {
-    back: 'Kembali ke atas \u2191',
-  },
+  'brand.name': 'Reginald M.R.G.',
+  'brand.mark': '®',
+  'brand.tunnel': 'Studio Kreatif',
+  'wall.eyebrow': 'Karya Pilihan — Tuban, Indonesia',
+  'wall.line1': 'Desain',
+  'wall.line2': 'Ilustrasi',
+  'wall.line3': 'Animasi & Edit',
+  'wall.link': 'Lihat Semua Karya',
+  'workSection.label': 'Karya Pilihan',
+  'workSection.title': 'Semua Karya',
+  'workSection.note': 'Campuran dari lima bidang. Pilih kategori untuk melihat keseluruhan karyanya.',
+  'experienceSection.label': 'Pengalaman',
+  'experienceSection.title': 'Rekam Jejak',
+  'experienceSection.note': 'Peran, organisasi, dan kompetisi di bidang desain visual serta media kreatif.',
+  'categories.0.label': 'Graphic Design',
+  'categories.0.desc': 'Identitas merek, kemasan, poster, dan aset visual untuk cetak maupun digital.',
+  'categories.1.label': 'Illustration',
+  'categories.1.desc': 'Ilustrasi digital, desain karakter, karya editorial, dan ilustrasi khusus.',
+  'categories.2.label': 'Video Editing',
+  'categories.2.desc': 'Penyuntingan video, motion graphics, color grading, dan sound design.',
+  'categories.3.label': 'Animation',
+  'categories.3.desc': 'Animasi logo, animasi produk, dan motion graphics.',
+  'categories.4.label': 'Photo Editing',
+  'categories.4.desc': 'Retouch, manipulasi, dan color grading untuk foto produk maupun editorial.',
+  'about.label': 'Tentang',
+  'about.lead': 'Saya seorang Graphic Designer, Illustrator, Animator, Video Editor, dan Photo Editor. Kalau kamu butuh desain, ilustrasi, animasi, video, atau retouch foto yang bagus, langsung hubungi saya saja.',
+  'about.cols.0.label': 'Bidang',
+  'about.cols.0.items.0': 'Graphic Design & Branding',
+  'about.cols.0.items.1': 'Ilustrasi Digital',
+  'about.cols.0.items.2': 'Video Editing & Motion',
+  'about.cols.0.items.3': 'Photo Editing & Retouching',
+  'about.cols.1.label': 'Perangkat',
+  'about.cols.1.items.0': 'Adobe Illustrator',
+  'about.cols.1.items.1': 'Adobe Photoshop',
+  'about.cols.1.items.2': 'Adobe Premiere Pro',
+  'about.cols.1.items.3': 'Adobe After Effects',
+  'about.cols.1.items.4': 'DaVinci Resolve',
+  'about.cols.1.items.5': 'Canva & Krita',
+  'about.cols.1.items.6': 'CapCut & Medibang',
+  'about.cols.2.label': 'Info',
+  'about.cols.2.items.0': 'Bahasa Indonesia / English',
+  'about.cols.2.items.1': 'Open For Freelance & Full-time',
+  'about.cols.2.items.2': 'Tuban, Jawa Timur, Indonesia',
+  'servicesSection.label': 'Layanan',
+  'services.0.title': 'Graphic Design',
+  'services.0.desc': 'Feed · poster, tipografi. Photoshop · infografis · pembuatan mockup · dan lainnya.',
+  'services.1.title': 'Video Editing',
+  'services.1.desc': 'Penyuntingan, motion graphics, color grading & sound design. Premiere Pro · After Effects · DaVinci Resolve · dan lainnya.',
+  'services.2.title': 'Photo Editing',
+  'services.2.desc': 'Retouch, manipulasi & color grading untuk foto produk dan editorial. Lightroom · Photoshop · dan lainnya.',
+  'services.3.title': 'Illustration',
+  'services.3.desc': 'Gaya anime · ilustrasi digital · buku anak · cover buku · logo · icon · maskot · dan lainnya.',
+  'services.4.title': 'Animation',
+  'services.4.desc': 'Animasi logo · animasi produk · After Effects · dan lainnya.',
+  'contact.label': 'Kontak',
+  'contact.title': 'Mari bekerja sama.',
+  'contact.email': 'reginaldguzherra@gmail.com',
+  'contact.note': 'Tersedia untuk proyek desain, ilustrasi, animasi, video, dan photo editing. Balasan dalam 1–2 hari kerja.',
+  'contact.socials.0.label': 'Instagram',
+  'contact.socials.1.label': 'WhatsApp',
+  'footer.left': '© {year} Reginald M.R.G. — Studio Kreatif',
+  'footer.center': 'Tuban, Jawa Timur, Indonesia',
+  'footer.back': 'Kembali ke atas ↑',
+  'cv.label': 'Unduh CV',
+  'experience.0.title': 'Kepala Divisi Media dan Branding',
+  'experience.0.org': 'Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS',
+  'experience.0.period': 'Feb 2025 – Des 2025',
+  'experience.0.desc': 'Membuat logo kabinet dengan Adobe Illustrator & Photoshop. Merancang desain jaket himpunan. Merekam dan menyunting company profile dengan CapCut & After Effects. Mengoordinasikan program kerja staf divisi.',
+  'experience.1.title': 'Staff Divisi Media dan Branding',
+  'experience.1.org': 'Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS',
+  'experience.1.period': 'Feb 2024 – Nov 2024',
+  'experience.1.desc': 'Membuat logo kabinet, desain jaket, dan company profile. Mendokumentasikan kegiatan dan mengoordinasikan program kerja divisi.',
+  'experience.2.title': 'Chief Product Officer',
+  'experience.2.org': 'Tescopave — Universitas Sebelas Maret',
+  'experience.2.period': 'Jun 2025 – Mar 2026',
+  'experience.2.desc': 'Membangun website penyajian informasi Tescopave. Mengelola akun Instagram dan membuat konten publikasi.',
+  'experience.3.title': 'Koordinator Divisi Media',
+  'experience.3.org': 'ENVICUP (Environmental Cup) 2.0 — UNS',
+  'experience.3.period': 'Mei 2025 – Sep 2025',
+  'experience.3.desc': 'Membuat logo ENVICUP dengan Adobe Illustrator. Merekam dan menyunting video teaser & trailer dengan Premiere Pro & CapCut. Menyusun publikasi Instagram dan mengoordinasikan jobdesk.',
+  'experience.4.title': 'Koordinator Divisi Media',
+  'experience.4.org': 'OXYGENE — UNS',
+  'experience.4.period': 'Mei 2024 – Sep 2024',
+  'experience.4.desc': 'Membuat logo OXYGENE dengan Adobe Illustrator dan mascot dengan Medibang. Menyunting video teaser, trailer, dan after movie dengan CapCut.',
+  'experience.5.title': 'Staff Divisi Aksi',
+  'experience.5.org': 'SDG\'s Center UNS',
+  'experience.5.period': 'Mar 2024 – Des 2024',
+  'experience.5.desc': 'Menyusun konsep kegiatan aksi, menjadi ketua pelaksana Project SABI 17(I), serta mengelola program sosial dan lingkungan.',
+  'experience.6.title': 'Staff Sosial dan Lingkungan',
+  'experience.6.org': 'Badan Eksekutif Mahasiswa (BEM) FMIPA UNS',
+  'experience.6.period': 'Mei 2024 – Nov 2024',
+  'experience.6.desc': 'Membuat konsep Video MIPA PEDIA, menyunting dengan CapCut, dan mendokumentasikan acara sosial.',
+  'experience.7.title': 'Staff Divisi Media',
+  'experience.7.org': 'Diesnatalis FMIPA X DUTA FMIPA UNS',
+  'experience.7.period': 'Agu 2024 – Sep 2024',
+  'experience.7.desc': 'Membuat poster publikasi, mendokumentasikan acara, dan menyusun publikasi Instagram.',
+  'experience.8.title': 'Koordinator Divisi Media',
+  'experience.8.org': 'Project SABI (Small Act Big Impact) 17(I) — SDG\'s Center UNS',
+  'experience.8.period': 'Apr 2024 – Mei 2024',
+  'experience.8.desc': 'Menyusun konsep dan rundown proyek, mengoordinasikan anggota, serta membuka donasi program.',
 }

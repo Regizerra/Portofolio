@@ -1,27 +1,23 @@
 {
   "theme": {},
   "brand": {
-    "name": "Reginald m.r.g.",
+    "name": "Reginald M.R.G.",
     "mark": "®",
     "tunnel": "Creative Studio"
   },
   "wall": {
-    "eyebrow": "Selected Work — Jakarta, Indonesia",
+    "eyebrow": "Selected Work — Tuban, Indonesia",
     "line1": "Design",
     "line2": "Illustrate",
-    "line3": "",
+    "line3": "Animate & Edit",
     "link": "View All Work"
   },
   "marquee": [
     "Graphic Design",
     "Illustration",
-    "GIS & Mapping",
     "Video Editing",
-    "Photo Retouching",
-    "Branding",
-    "New Item",
-    "New Item",
-    "New Item"
+    "Animation\n",
+    "Photo Editing"
   ],
   "workSection": {
     "label": "Selected Work",
@@ -31,9 +27,73 @@
   "experienceSection": {
     "label": "Experience",
     "title": "Track Record",
-    "note": "Roles, collaborations, and the path that got here. Entries appear once you give them a title."
+    "note": "Roles, organisations, and competitions across visual design and creative media."
   },
-  "experience": [],
+  "experience": [
+    {
+      "title": "Kepala Divisi Media dan Branding",
+      "org": "Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS",
+      "period": "Feb 2025 – Dec 2025",
+      "desc": "Membuat logo kabinet dengan Adobe Illustrator & Photoshop. Merancang desain jaket himpunan. Merekam dan menyunting company profile dengan CapCut & After Effects. Mengoordinasikan program kerja staf divisi.",
+      "img": null
+    },
+    {
+      "title": "Staff Divisi Media dan Branding",
+      "org": "Himpunan Mahasiswa Ilmu Ilmu Lingkungan (HIMAPSILI) UNS",
+      "period": "Feb 2024 – Nov 2024",
+      "desc": "Membuat logo kabinet, desain jaket, dan company profile. Mendokumentasikan kegiatan dan mengoordinasikan program kerja divisi.",
+      "img": null
+    },
+    {
+      "title": "Chief Product Officer",
+      "org": "Tescopave — Universitas Sebelas Maret",
+      "period": "Jun 2025 – Mar 2026",
+      "desc": "Membangun website penyajian informasi Tescopave. Mengelola akun Instagram dan membuat konten publikasi.",
+      "img": null
+    },
+    {
+      "title": "Koordinator Divisi Media",
+      "org": "ENVICUP (Environmental Cup) 2.0 — UNS",
+      "period": "May 2025 – Sep 2025",
+      "desc": "Membuat logo ENVICUP dengan Adobe Illustrator. Merekam dan menyunting video teaser & trailer dengan Premiere Pro & CapCut. Menyusun publikasi Instagram dan mengoordinasikan jobdesk.",
+      "img": null
+    },
+    {
+      "title": "Koordinator Divisi Media",
+      "org": "OXYGENE — UNS",
+      "period": "May 2024 – Sep 2024",
+      "desc": "Membuat logo OXYGENE dengan Adobe Illustrator dan mascot dengan Medibang. Menyunting video teaser, trailer, dan after movie dengan CapCut.",
+      "img": null
+    },
+    {
+      "title": "Staff Divisi Aksi",
+      "org": "SDG's Center UNS",
+      "period": "Mar 2024 – Dec 2024",
+      "desc": "Menyusun konsep kegiatan aksi, menjadi ketua pelaksana Project SABI 17(I), serta mengelola programbiggl social dan lingkungan.",
+      "img": null
+    },
+    {
+      "title": "Staff Implikasi Sosial dan Lingkungan",
+      "org": "Badan Eksekutif Mahasiswa (BEM) FMIPA UNS",
+      "period": "May 2024 – Nov 2024",
+      "desc": "Membuat konsep Video MIPA PEDIA, menyunting dengan CapCut, dan mendokumentasikan acara sosial.",
+      "img": null
+    },
+    {
+      "title": "Staff Divisi Media",
+      "org": "Diesnatalis FMIPA X DUTA FMIPA UNS",
+      "period": "Aug 2024 – Sep 2024",
+      "desc": "Membuat poster publikasi, mendokumentasikan acara, dan menyusun publikasi Instagram.",
+      "img": null
+    },
+    {
+      "title": "Koordinator Divisi Media",
+      "org": "Project SABI (Small Act Big Impact) 17(I) — SDG’s Center UNS",
+      "period": "Apr 2024 – May 2024",
+      "desc": "Menyusun konsep dan rundown proyek, mengoordinasikan anggota, serta membuka donasi program.",
+      "img": null
+    }
+  ],
   "stickers": [],
   "categories": [
     {
@@ -52,9 +112,9 @@
       "desc": "Video editing, motion graphics, color grading, and sound design."
     },
     {
-      "id": "gis",
+      "id": "animation",
       "label": "Animation\n",
-      "desc": "Spatial data analysis, thematic maps, cartography, and remote sensing."
+      "desc": "Logo animation, product animation, and motion graphics."
     },
     {
       "id": "photo-editing",
@@ -367,63 +427,79 @@
   ],
   "about": {
     "label": "About",
-    "photo": "/work/about.png",
-    "lead": "Reginald Maghfirot Rammadhani G",
+    "photo": null,
+    "lead": "I am a Graphic Designer, Illustrator, Animator, Video Editor, and Photo Editor. So, if you need a best design, illustration, animation, video, or touch up your photo...Reach me out!!!",
     "cols": [
       {
         "label": "Fields",
         "items": [
           "Graphic Design & Branding",
           "Digital Illustration",
-          "GIS & Spatial Mapping",
           "Video Editing & Motion",
           "Photo Editing & Retouching"
         ]
       },
       {
-        "label": "Selected Clients",
+        "label": "Tools",
         "items": [
-          "Local Coffee Shop",
-          "Architecture Studio",
-          "Research Institute",
-          "Fashion Brand",
-          "Tech Startup"
+          "Adobe Illustrator",
+          "Adobe Photoshop",
+          "Adobe Premiere Pro",
+          "Adobe After Effects",
+          "DaVinci Resolve",
+          "Canva",
+          "Krita",
+          "Cap Cut",
+          "Medibang"
         ]
       },
       {
         "label": "Info",
         "items": [
-          "Jakarta, Indonesia",
-          "Indonesia / English",
-          "Freelance & Full-time"
+          "Bahasa Indonesia / English",
+          "Open For Freelance & Full-time"
         ]
       }
-    ],
-    "slotLabel": "Resfvsfgafve",
-    "slotText": ""
+    ]
   },
   "servicesSection": {
     "label": "Services"
   },
   "services": [
     {
+      "title": "Graphic Design",
+      "desc": "Feeds · posters, typography. Photoshop · Infographic  · Mockup Making  · etc"
+    },
+    {
+      "title": "Video Editing",
+      "desc": "Editing, motion graphics, color grading & sound design. Premiere Pro · After Effects · DaVinci Resolve. Etc"
+    },
+    {
       "title": "Photo Editing",
-      "desc": "Retouching, manipulation & color grading for product and editorial photos. Lightroom · Photoshop."
+      "desc": "Retouching, manipulation & color grading for product and editorial photos. Lightroom · Photoshop. Etc"
+    },
+    {
+      "title": "Illustration",
+      "desc": "Anime Style  · Digital Illustration  · Children Book  ·  Book Cover  · Logo  · Icon · Mascot  · Etc"
+    },
+    {
+      "title": "Animation",
+      "desc": "Logo Animation · Product Animation  · After Effect · Etc"
     }
   ],
   "contact": {
     "label": "Contact",
     "title": "Let's work together.",
-    "email": "email@you.com",
-    "note": "Available for design, illustration, mapping, video & photo editing projects. Replies within 1–2 business days.",
+    "email": "reginaldguzherra@gmail.com",
+    "note": "Available for design, illustration, animation, video & photo editing projects. Replies within 1–2 business days.",
     "socials": [
       {
         "label": "Instagram",
         "url": "https://www.instagram.com/"
       },
       {
-        "label": "Behance",
-        "url": "https://www.behance.net/"
+        "label": "WhatsApp",
+        "url": "https://wa.me/6289673108957"
       }
     ]
   },
@@ -432,77 +508,112 @@
     "href": "/cv.pdf"
   },
   "footer": {
-    "left": "© {year} Your Name — Creative Studio",
-    "center": "Jakarta, Indonesia",
+    "left": "© {year} Reginald M.R.G. — Creative Studio",
+    "center": "Tuban, Jawa Timur, Indonesia",
     "back": "Back to top ↑"
   },
   "translations": {
     "id": {
-      "wall.eyebrow": "Karya Pilihan — Jakarta, Indonesia",
+      "brand.name": "Reginald M.R.G.",
+      "brand.mark": "®",
+      "brand.tunnel": "Studio Kreatif",
+      "wall.eyebrow": "Karya Pilihan — Tuban, Indonesia",
       "wall.line1": "Desain",
       "wall.line2": "Ilustrasi",
-      "wall.line3": "Petakan & Edit",
+      "wall.line3": "Animasi & Edit",
       "wall.link": "Lihat Semua Karya",
-      "marquee.0": "Desain Grafis",
-      "marquee.1": "Ilustrasi",
-      "marquee.2": "GIS & Pemetaan",
-      "marquee.3": "Video Editing",
-      "marquee.4": "Photo Retouching",
-      "marquee.5": "Branding",
       "workSection.label": "Karya Pilihan",
       "workSection.title": "Semua Karya",
-      "workSection.note": "Campuran dari lima bidang. Pilih kategori untuk melihat versi lengkapnya.",
+      "workSection.note": "Campuran dari lima bidang. Pilih kategori untuk melihat keseluruhan karyanya.",
       "experienceSection.label": "Pengalaman",
       "experienceSection.title": "Rekam Jejak",
-      "experienceSection.note": "Peran, kolaborasi, dan perjalanan sampai ke titik ini. Entri baru muncul setelah kamu memberi judulnya.",
-      "categories.0.id": "graphic-design",
-      "categories.0.label": "Desain Grafis",
-      "categories.0.desc": "Identitas brand, kemasan, poster, dan materi visual cetak maupun digital.",
-      "categories.1.id": "illustration",
-      "categories.1.label": "Ilustrasi",
-      "categories.1.desc": "Ilustrasi digital, karakter, editorial, dan artwork custom.",
-      "categories.2.id": "video-editing",
+      "experienceSection.note": "Peran, organisasi, dan kompetisi di bidang desain visual serta media kreatif.",
+      "categories.0.label": "Graphic Design",
+      "categories.0.desc": "Identitas merek, kemasan, poster, dan aset visual untuk cetak maupun digital.",
+      "categories.1.label": "Illustration",
+      "categories.1.desc": "Ilustrasi digital, desain karakter, karya editorial, dan ilustrasi khusus.",
       "categories.2.label": "Video Editing",
-      "categories.2.desc": "Penyuntingan video, motion graphic, color grading, dan sound design.",
-      "categories.3.id": "gis",
-      "categories.3.label": "Animasi",
-      "categories.3.desc": "Pengolahan data spasial, peta tematik, kartografi, dan remote sensing.",
-      "categories.4.id": "photo-editing",
+      "categories.2.desc": "Penyuntingan video, motion graphics, color grading, dan sound design.",
+      "categories.3.label": "Animation",
+      "categories.3.desc": "Animasi logo, animasi produk, dan motion graphics.",
       "categories.4.label": "Photo Editing",
-      "categories.4.desc": "Retouching, manipulasi, dan color grading foto produk maupun editorial.",
+      "categories.4.desc": "Retouch, manipulasi, dan color grading untuk foto produk maupun editorial.",
       "about.label": "Tentang",
-      "about.lead": "Kreator visual multidisiplin yang bergerak antara kanvas ilustrasi, peta spasial, dan timeline video. Bagi saya, desain yang baik bukan sekadar indah — ia harus menyampaikan pesan dengan jelas.",
+      "about.lead": "Saya seorang Graphic Designer, Illustrator, Animator, Video Editor, dan Photo Editor. Kalau kamu butuh desain, ilustrasi, animasi, video, atau retouch foto yang bagus, langsung hubungi saya saja.",
       "about.cols.0.label": "Bidang",
-      "about.cols.0.items.0": "Desain Grafis & Branding",
+      "about.cols.0.items.0": "Graphic Design & Branding",
       "about.cols.0.items.1": "Ilustrasi Digital",
-      "about.cols.0.items.2": "GIS & Pemetaan Spasial",
-      "about.cols.0.items.3": "Video Editing & Motion",
-      "about.cols.0.items.4": "Photo Editing & Retouching",
-      "about.cols.1.label": "Klien Terpilih",
-      "about.cols.1.items.0": "Kedai Kopi Lokal",
-      "about.cols.1.items.1": "Studio Arsitektur",
-      "about.cols.1.items.2": "Lembaga Riset",
-      "about.cols.1.items.3": "Brand Fashion",
-      "about.cols.1.items.4": "Startup Teknologi",
+      "about.cols.0.items.2": "Video Editing & Motion",
+      "about.cols.0.items.3": "Photo Editing & Retouching",
+      "about.cols.1.label": "Perangkat",
+      "about.cols.1.items.0": "Adobe Illustrator",
+      "about.cols.1.items.1": "Adobe Photoshop",
+      "about.cols.1.items.2": "Adobe Premiere Pro",
+      "about.cols.1.items.3": "Adobe After Effects",
+      "about.cols.1.items.4": "DaVinci Resolve",
+      "about.cols.1.items.5": "Canva & Krita",
+      "about.cols.1.items.6": "CapCut & Medibang",
       "about.cols.2.label": "Info",
-      "about.cols.2.items.0": "Jakarta, Indonesia",
-      "about.cols.2.items.1": "Indonesia / English",
-      "about.cols.2.items.2": "Freelance & Full-time",
+      "about.cols.2.items.0": "Bahasa Indonesia / English",
+      "about.cols.2.items.1": "Open For Freelance & Full-time",
+      "about.cols.2.items.2": "Tuban, Jawa Timur, Indonesia",
       "servicesSection.label": "Layanan",
-      "services.0.title": "Desain Grafis & Ilustrasi",
-      "services.0.desc": "Logo & identitas brand, kemasan, poster, ilustrasi digital, tipografi. Photoshop · Illustrator · InDesign · Procreate.",
-      "services.1.title": "GIS & Pemetaan",
-      "services.1.desc": "Pengolahan data spasial, peta tematik, kartografi & remote sensing. ArcGIS · QGIS · Google Earth Engine.",
-      "services.2.title": "Video Editing",
-      "services.2.desc": "Penyuntingan, motion graphic, color grading & sound design. Premiere Pro · After Effects · DaVinci Resolve.",
-      "services.3.title": "Photo Editing",
-      "services.3.desc": "Retouching, manipulasi & color grading foto produk maupun editorial. Lightroom · Photoshop.",
+      "services.0.title": "Graphic Design",
+      "services.0.desc": "Feed · poster, tipografi. Photoshop · infografis · pembuatan mockup · dan lainnya.",
+      "services.1.title": "Video Editing",
+      "services.1.desc": "Penyuntingan, motion graphics, color grading & sound design. Premiere Pro · After Effects · DaVinci Resolve · dan lainnya.",
+      "services.2.title": "Photo Editing",
+      "services.2.desc": "Retouch, manipulasi & color grading untuk foto produk dan editorial. Lightroom · Photoshop · dan lainnya.",
+      "services.3.title": "Illustration",
+      "services.3.desc": "Gaya anime · ilustrasi digital · buku anak · cover buku · logo · icon · maskot · dan lainnya.",
+      "services.4.title": "Animation",
+      "services.4.desc": "Animasi logo · animasi produk · After Effects · dan lainnya.",
       "contact.label": "Kontak",
       "contact.title": "Mari bekerja sama.",
-      "contact.note": "Tersedia untuk proyek desain, ilustrasi, pemetaan, video & photo editing. Balasan dalam 1–2 hari kerja.",
-      "cv.label": "Unduh CV",
+      "contact.email": "reginaldguzherra@gmail.com",
+      "contact.note": "Tersedia untuk proyek desain, ilustrasi, animasi, video, dan photo editing. Balasan dalam 1–2 hari kerja.",
+      "contact.socials.0.label": "Instagram",
+      "contact.socials.1.label": "WhatsApp",
+      "footer.left": "© {year} Reginald M.R.G. — Studio Kreatif",
+      "footer.center": "Tuban, Jawa Timur, Indonesia",
       "footer.back": "Kembali ke atas ↑",
-      "about.slotLabel": "Catatan"
+      "cv.label": "Unduh CV",
+      "experience.0.title": "Kepala Divisi Media dan Branding",
+      "experience.0.org": "Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS",
+      "experience.0.period": "Feb 2025 – Des 2025",
+      "experience.0.desc": "Membuat logo kabinet dengan Adobe Illustrator & Photoshop. Merancang desain jaket himpunan. Merekam dan menyunting company profile dengan CapCut & After Effects. Mengoordinasikan program kerja staf divisi.",
+      "experience.1.title": "Staff Divisi Media dan Branding",
+      "experience.1.org": "Himpunan Mahasiswa Ilmu Lingkungan (HIMAPSILI) UNS",
+      "experience.1.period": "Feb 2024 – Nov 2024",
+      "experience.1.desc": "Membuat logo kabinet, desain jaket, dan company profile. Mendokumentasikan kegiatan dan mengoordinasikan program kerja divisi.",
+      "experience.2.title": "Chief Product Officer",
+      "experience.2.org": "Tescopave — Universitas Sebelas Maret",
+      "experience.2.period": "Jun 2025 – Mar 2026",
+      "experience.2.desc": "Membangun website penyajian informasi Tescopave. Mengelola akun Instagram dan membuat konten publikasi.",
+      "experience.3.title": "Koordinator Divisi Media",
+      "experience.3.org": "ENVICUP (Environmental Cup) 2.0 — UNS",
+      "experience.3.period": "Mei 2025 – Sep 2025",
+      "experience.3.desc": "Membuat logo ENVICUP dengan Adobe Illustrator. Merekam dan menyunting video teaser & trailer dengan Premiere Pro & CapCut. Menyusun publikasi Instagram dan mengoordinasikan jobdesk.",
+      "experience.4.title": "Koordinator Divisi Media",
+      "experience.4.org": "OXYGENE — UNS",
+      "experience.4.period": "Mei 2024 – Sep 2024",
+      "experience.4.desc": "Membuat logo OXYGENE dengan Adobe Illustrator dan mascot dengan Medibang. Menyunting video teaser, trailer, dan after movie dengan CapCut.",
+      "experience.5.title": "Staff Divisi Aksi",
+      "experience.5.org": "SDG's Center UNS",
+      "experience.5.period": "Mar 2024 – Des 2024",
+      "experience.5.desc": "Menyusun konsep kegiatan aksi, menjadi ketua pelaksana Project SABI 17(I), serta mengelola program sosial dan lingkungan.",
+      "experience.6.title": "Staff Sosial dan Lingkungan",
+      "experience.6.org": "Badan Eksekutif Mahasiswa (BEM) FMIPA UNS",
+      "experience.6.period": "Mei 2024 – Nov 2024",
+      "experience.6.desc": "Membuat konsep Video MIPA PEDIA, menyunting dengan CapCut, dan mendokumentasikan acara sosial.",
+      "experience.7.title": "Staff Divisi Media",
+      "experience.7.org": "Diesnatalis FMIPA X DUTA FMIPA UNS",
+      "experience.7.period": "Agu 2024 – Sep 2024",
+      "experience.7.desc": "Membuat poster publikasi, mendokumentasikan acara, dan menyusun publikasi Instagram.",
+      "experience.8.title": "Koordinator Divisi Media",
+      "experience.8.org": "Project SABI (Small Act Big Impact) 17(I) — SDG's Center UNS",
+      "experience.8.period": "Apr 2024 – Mei 2024",
+      "experience.8.desc": "Menyusun konsep dan rundown proyek, mengoordinasikan anggota, serta membuka donasi program."
     }
   }
 }
